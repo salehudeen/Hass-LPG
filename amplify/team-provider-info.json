@@ -10,6 +10,11 @@
       "StackName": "amplify-hasslpgapp-dev-653b5",
       "StackId": "arn:aws:cloudformation:sa-east-1:428464588749:stack/amplify-hasslpgapp-dev-653b5/e90fffd0-144a-11ef-aa9c-0229cfaf94c3",
       "AmplifyAppId": "d8hwyu0m5tqs0"
+    },
+    "categories": {
+      "auth": {
+        "hasslpgapp54ffb78f": {}
+      }
     }
   }
 }
