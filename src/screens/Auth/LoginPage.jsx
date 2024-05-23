@@ -1,152 +1,159 @@
-import React, { useState } from 'react'
-import { Alert, Button, Image, Pressable, SafeAreaView, StyleSheet, Switch, Text, TextInput, View } from 'react-native'
+import React from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Dimensions } from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons';
 
+const { width, height } = Dimensions.get('window');
 
-const logo = require("../../assets/Hass-Logo.png")
-
-
-export default function LoginForm({navigation}) {
-    const [click,setClick] = useState(false);
-    const {username,setUsername}=  useState("");
-    const {password,setPassword}=  useState("");
+const LoginForm = ({navigation}) => {
   return (
-    <SafeAreaView style={styles.container}>
-        
-        <Image source={logo} style={styles.image} resizeMode='contain' />
-        <Text style={styles.title}>Login</Text>
-        <View style={styles.inputView}>
-            <TextInput style={styles.input} placeholder='EMAIL OR USERNAME' value={username} onChangeText={setUsername} autoCorrect={false}
-        autoCapitalize='none' />
-            <TextInput style={styles.input} placeholder='PASSWORD' secureTextEntry value={password} onChangeText={setPassword} autoCorrect={false}
-        autoCapitalize='none'/>
-        </View>
-        <View style={styles.rememberView}>
-            <View style={styles.switch}>
-                <Switch  value={click} onValueChange={setClick} trackColor={{true : "#06045A" , false : "gray"}} />
-                <Text style={styles.rememberText}>Remember Me</Text>
-            </View>
-            <View>
-                <Pressable onPress={() => Alert.alert("Forget Password!")}>
-                    <Text style={styles.forgetText}>Forgot Password?</Text>
-                </Pressable>
-            </View>
-        </View>
+    <View style={styles.container}>
+      
+      <View style={styles.blob1}></View>
+      <View style={styles.blob2}></View>
 
-        <View style={styles.buttonView}>
-            <Pressable style={styles.button} onPress={() => navigation.navigate('Home')}>
-                <Text style={styles.buttonText}>LOGIN</Text>
-            </Pressable>
-           
-        </View>
-        
-        <View style={styles.mediaIcons}>
-               
-        </View>
-
-        <Text style={styles.footerText}>Don't Have Account?<Text style={styles.signup} onPress={() => navigation.navigate('Signup')}>  Sign Up</Text></Text>
-
-        
-    </SafeAreaView>
-  )
-}
-
+      
+      <View style={styles.header}>
+        <Text style={styles.welcomeText}>Welcome Back</Text>
+      </View>
+      <View style={styles.inputContainer}>
+        <TextInput style={styles.input} placeholder="Email" placeholderTextColor="#777" />
+        <MaterialIcons name="email" size={24} color="#06045E" style={styles.icon} />
+      </View>
+      <View style={styles.inputContainer}>
+        <TextInput style={styles.input} placeholder="Password" placeholderTextColor="#777" secureTextEntry />
+        <MaterialIcons name="lock" size={24} color="#06045E" style={styles.icon} />
+      </View>
+      <View style={styles.optionsContainer}>
+        <TouchableOpacity>
+          <Text style={styles.rememberMe}>Remember Me</Text>
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <Text style={styles.forgotPassword} onPress={() => navigation.navigate('ForgotPassword')} >Forgot Password?</Text>
+        </TouchableOpacity>
+      </View>
+      <TouchableOpacity style={styles.loginButton} onPress={() => navigation.navigate('Home')}  >
+        <Text style={styles.loginButtonText} >Login</Text>
+      </TouchableOpacity>
+      
+      <View style={styles.footer}>
+        <Text style={styles.noAccountText}>Don't have an account ?</Text>
+        <TouchableOpacity>
+          <Text style={styles.signUpText} onPress={() => navigation.navigate('Signup')} >Sign Up</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
-  container : {
-    
-    alignItems : "center",
-    paddingTop: 120,
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    paddingHorizontal: 20,
+    justifyContent: 'center',
   },
-  image : {
-    height : 160,
-    width : 170
+  
+  blob1: {
+    position: 'absolute',
+    width: width * 0.8,
+    height: height * 0.3,
+    backgroundColor: '#06045E',
+    borderBottomRightRadius: width * 0.4,
+    borderBottomLeftRadius: width * 0.4,
+    top: -height * 0.1,
+    left: -width * 0.1,
   },
-  title : {
-    fontSize : 30,
-    fontWeight : "bold",
-    textTransform : "uppercase",
-    textAlign: "center",
-    paddingVertical : 40,
-    color : "#06045A"
+  blob2: {
+    position: 'absolute',
+    width: width * 0.8,
+    height: height * 0.4,
+    backgroundColor: 'gold',
+    borderTopLeftRadius: width * 0.4,
+    borderTopRightRadius: width * 0.4,
+    bottom: -height * 0.2,
+    right: -width * 0.1,
   },
-  inputView : {
-    gap : 15,
-    width : "100%",
-    paddingHorizontal : 40,
-    marginBottom  :5
+  header: {
+    marginBottom: 40,
   },
-  input : {
-    height : 50,
-    paddingHorizontal : 20,
-    borderColor : "#06045A",
-    borderWidth : 1,
-    borderRadius: 7
+  welcomeText: {
+    fontSize: 30,
+    color: '#06045E',
+    fontWeight: 'bold',
   },
-  rememberView : {
-    width : "100%",
-    paddingHorizontal : 50,
-    justifyContent: "space-between",
-    alignItems : "center",
-    flexDirection : "row",
-    marginBottom : 8
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+    marginBottom: 20,
   },
-  switch :{
-    flexDirection : "row",
-    gap : 1,
-    justifyContent : "center",
-    alignItems : "center",
-    color:'#06045A',
-    
-  },
-  rememberText : {
-    fontSize: 13
-  },
-  forgetText : {
-    fontSize : 11,
-    color : "red"
-  },
-  button : {
-    backgroundColor : "#06045A",
-    height : 45,
-    borderColor : "gray",
-    borderWidth  : 1,
-    borderRadius : 5,
-    alignItems : "center",
-    justifyContent : "center"
-  },
-  buttonText : {
-    color : "white"  ,
-    fontSize: 18,
-    fontWeight : "bold"
-  }, 
-  buttonView :{
-    width :"100%",
-    paddingHorizontal : 50
-  },
-  optionsText : {
-    textAlign : "center",
-    paddingVertical : 10,
-    color : "gray",
-    fontSize : 13,
-    marginBottom : 6
-  },
-  mediaIcons : {
-    flexDirection : "row",
-    gap : 15,
-    alignItems: "center",
-    justifyContent : "center",
-    marginBottom : 23
-  },
-  icons : {
-    width : 40,
+  input: {
+    flex: 1,
     height: 40,
+    fontSize: 16,
+    color: '#06045E',
   },
-  footerText : {
-    textAlign: "center",
-    color : "gray",
+  icon: {
+    marginLeft: 10,
   },
-  signup : {
-    color : "red",
-    fontSize : 13
-  }
-})
+  optionsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  rememberMe: {
+    color: '#06045E',
+  },
+  forgotPassword: {
+    color: '#06045E',
+  },
+  loginButton: {
+    backgroundColor: '#06045E',
+    paddingVertical: 15,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  loginButtonText: {
+    color: '#fff',
+    fontSize: 16,
+  },
+  orText: {
+    textAlign: 'center',
+    marginBottom: 20,
+    color: '#06045E',
+  },
+  googleButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderColor: '#06045E',
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    marginBottom: 20,
+  },
+  googleLogo: {
+    width: 20,
+    height: 20,
+    marginRight: 10,
+  },
+  googleButtonText: {
+    color: '#06045E',
+    fontSize: 16,
+  },
+  footer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  noAccountText: {
+    color: '#06045E',
+  },
+  signUpText: {
+    color: 'gold',
+    marginLeft: 5,
+  },
+});
+
+export default LoginForm;
