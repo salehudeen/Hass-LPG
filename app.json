@@ -4,13 +4,9 @@
     "slug": "hass_lpg_app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./src/assets/icon.png",
+    "icon": "./src/assets/Hass-Logo.png",
     "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./src/assets/Hass-Logo.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
+    
     "ios": {
       "supportsTablet": true
     },

@@ -1,85 +1,107 @@
-import React, { useRef, useEffect } from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, Dimensions, Image } from 'react-native';
-import Carousel from 'react-native-snap-carousel';
+import React, { useState, useRef, useEffect } from 'react';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, Dimensions, Image, ScrollView } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const HomePage = ({ navigation }) => {
+    const [activeIndex, setActiveIndex] = useState(0);
     const carouselRef = useRef(null);
-    
+    const intervalRef = useRef(null);
+
     useEffect(() => {
-        const interval = setInterval(() => {
-            if (carouselRef.current) {
-                carouselRef.current.snapToNext();
-            }
+        intervalRef.current = setInterval(() => {
+            setActiveIndex((prevIndex) => (prevIndex + 1) % carouselData.length);
         }, 3000); // Change slide every 3 seconds
-        return () => clearInterval(interval);
+
+        return () => clearInterval(intervalRef.current);
     }, []);
 
     const carouselData = [
         {
-            title: 'Section 1',
-            icon: 'home',
-            image: require('../../assets/download.jpg'), 
-            navigateTo: 'Section1'
+            title: 'Hass Gas',
+            info: 'Gas to your location quick and easy.',
+            image: require('../../assets/download.jpg'),
+            button:'Get Hass Gas',
+            navigateTo: ''
         },
         {
-            title: 'Section 2',
-            icon: 'place',
+            title: 'Find Stations',
+            info: 'Get nearby stations.',
             image: require('../../assets/download.jpg'),
-            navigateTo: 'Section2'
+            button:'Find Stations',
+            navigateTo: ''
         },
         {
-            title: 'Section 3',
-            icon: 'local-gas-station',
+            title: 'Fuel Cards',
+            info: 'Apply for Fuel card.',
             image: require('../../assets/download.jpg'),
-            navigateTo: 'Section3'
+            button:'Fuel Card',
+            navigateTo: ''
         },
+    ];
+
+    const quickActions = [
+        { title: 'Station Finder', info: 'Locate us anywhere', image: require('../../assets/download.jpg'), navigateTo: '' },
+        { title: 'Hass FCS Card', info: 'Apply | Top Up | Manage', image: require('../../assets/download.jpg'), navigateTo: '' },
+        { title: 'Hass Gas', info: 'Get Hass Gas', image: require('../../assets/download.jpg'), navigateTo: '' },
     ];
 
     const renderCarouselItem = ({ item }) => (
-        <TouchableOpacity style={styles.card} onPress={() => navigation.navigate(item.navigateTo)}>
-            <Text style={styles.cardTitle}>{item.title}</Text>
-            <MaterialIcons name={item.icon} size={50} color="#06045E" />
-            <Image source={item.image} style={styles.cardImage} />
+        <TouchableOpacity style={styles.carouselCard} onPress={() => navigation.navigate(item.navigateTo)}>
+            <Image source={item.image} style={styles.carouselImage} />
+            <View style={styles.carouselTextContainer}>
+                <Text style={styles.carouselTitle}>{item.title}</Text>
+                <Text style={styles.carouselInfo}>{item.info}</Text>
+                <TouchableOpacity style={styles.findStationButton} onPress={() => navigation.navigate(item.navigateTo)}>
+                    <Text style={styles.findStationButtonText}>{item.button}</Text>
+                </TouchableOpacity>
+            </View>
         </TouchableOpacity>
     );
 
-    const flatListData = [
-        { key: 'Buy Gas', navigateTo: 'BuyGas' },
-        { key: 'Get Stations Locations', navigateTo: 'StationLocations' },
-        { key: 'Apply for Fuel Cards', navigateTo: 'FuelCards' },
-        { key: '', navigateTo: '' }, // Blank item
-    ];
-
-    const renderFlatListItem = ({ item }) => (
-        <TouchableOpacity 
-            style={[styles.flatListItem, item.key === '' && styles.blankFlatListItem]} 
-            onPress={() => item.navigateTo && navigation.navigate(item.navigateTo)}
-        >
-            <Text style={styles.flatListText}>{item.key}</Text>
+    const renderQuickActionItem = ({ item }) => (
+        <TouchableOpacity style={styles.quickActionCard} onPress={() => navigation.navigate(item.navigateTo)}>
+            <Image source={item.image} style={styles.quickActionImage} />
+            <View style={styles.quickActionTextContainer}>
+                <Text style={styles.quickActionTitle}>{item.title}</Text>
+                <Text style={styles.quickActionInfo}>{item.info}</Text>
+            </View>
+            <MaterialIcons name="arrow-forward-ios" size={20} color="#000" />
         </TouchableOpacity>
     );
 
     return (
         <View style={styles.container}>
-            <View style={styles.carouselContainer}>
-                <Carousel
+            <View style={styles.topSection}>
+                <Text style={styles.greetingText}>Good Afternoon</Text>
+                <ScrollView
+                    horizontal
+                    pagingEnabled
                     ref={carouselRef}
-                    data={carouselData}
-                    renderItem={renderCarouselItem}
-                    sliderWidth={width}
-                    itemWidth={width * 0.8}
-                    loop
+                    onScroll={(event) => {
+                        const index = Math.floor(event.nativeEvent.contentOffset.x / width);
+                        setActiveIndex(index);
+                    }}
+                    scrollEventThrottle={16}
+                    showsHorizontalScrollIndicator={false}
+                >
+                    {carouselData.map((item, index) => (
+                        <View key={index} style={styles.carouselItem}>
+                            {renderCarouselItem({ item })}
+                        </View>
+                    ))}
+                </ScrollView>
+            </View>
+            <View style={styles.quickActionsSection}>
+                <Text style={styles.quickActionsTitle}>Quick Actions</Text>
+                <FlatList
+                    data={quickActions}
+                    renderItem={renderQuickActionItem}
+                    keyExtractor={(item) => item.title}
+                    style={styles.quickActionsList}
                 />
             </View>
-            <FlatList
-                data={flatListData}
-                renderItem={renderFlatListItem}
-                keyExtractor={(item) => item.key}
-                style={styles.flatList}
-            />
             <View style={styles.navBar}>
                 <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Home')}>
                     <MaterialIcons name="home" size={30} color="white" />
@@ -88,6 +110,14 @@ const HomePage = ({ navigation }) => {
                 <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('MyOrders')}>
                     <MaterialIcons name="receipt" size={30} color="white" />
                     <Text style={styles.navButtonText}>My Orders</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Anticounterfeit')}>
+                    <MaterialIcons name="verified" size={30} color="white" />
+                    <Text style={styles.navButtonText}>Anticounterfeit</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('MyCard')}>
+                    <MaterialIcons name="credit-card" size={30} color="white" />
+                    <Text style={styles.navButtonText}>My Card</Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -99,47 +129,102 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
     },
-    carouselContainer: {
-        height: 250,
-        marginTop: 20,
+    topSection: {
+        height: height * 0.4,
+        backgroundColor: '#f5f5f5',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
-    card: {
+    greetingText: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginVertical: 10,
+    },
+    carouselItem: {
+        width: width,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    carouselCard: {
+        width: width * 0.9,
         backgroundColor: '#fff',
         borderRadius: 10,
-        padding: 20,
-        alignItems: 'center',
-        justifyContent: 'center',
+        overflow: 'hidden',
         shadowColor: '#000',
         shadowOpacity: 0.2,
         shadowOffset: { width: 0, height: 2 },
         shadowRadius: 10,
         elevation: 3,
     },
-    cardTitle: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginBottom: 10,
-        color: '#06045E',
-    },
-    cardImage: {
+    carouselImage: {
         width: '100%',
         height: 150,
+    },
+    carouselTextContainer: {
+        padding: 10,
+    },
+    carouselTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#000',
+    },
+    carouselInfo: {
+        fontSize: 14,
+        color: '#000',
+        marginVertical: 5,
+    },
+    findStationButton: {
+        backgroundColor: '#06045E',
+        padding: 10,
+        borderRadius: 5,
+        alignItems: 'center',
+    },
+    findStationButtonText: {
+        color: '#fff',
+        fontSize: 14,
+    },
+    quickActionsSection: {
+        flex: 1,
+        paddingHorizontal: 10,
+    },
+    quickActionsTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginVertical: 10,
+    },
+    quickActionsList: {
+        marginVertical: 10,
+    },
+    quickActionCard: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#fff',
+        padding: 10,
+        borderRadius: 10,
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowOffset: { width: 0, height: 2 },
+        shadowRadius: 5,
+        elevation: 3,
+        marginBottom: 10,
+    },
+    quickActionImage: {
+        width: 50,
+        height: 50,
         borderRadius: 10,
     },
-    flatList: {
-        marginVertical: 20,
+    quickActionTextContainer: {
+        flex: 1,
+        marginLeft: 10,
     },
-    flatListItem: {
-        padding: 20,
-        borderBottomWidth: 1,
-        borderBottomColor: '#ccc',
+    quickActionTitle: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#000',
     },
-    flatListText: {
-        fontSize: 18,
-        color: '#06045E',
-    },
-    blankFlatListItem: {
-        backgroundColor: '#f0f0f0',
+    quickActionInfo: {
+        fontSize: 14,
+        color: '#000',
     },
     navBar: {
         flexDirection: 'row',
