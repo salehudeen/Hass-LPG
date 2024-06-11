@@ -1,4 +1,5 @@
 import React from 'react';
+import { StatusBar } from 'expo-status-bar';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Dimensions } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
@@ -7,7 +8,11 @@ const { width, height } = Dimensions.get('window');
 const LoginForm = ({navigation}) => {
   return (
     <View style={styles.container}>
-      
+      <StatusBar  
+                    
+                    hidden = {false}    
+               
+                />  
       <View style={styles.blob1}></View>
       <View style={styles.blob2}></View>
 

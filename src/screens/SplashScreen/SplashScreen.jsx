@@ -1,18 +1,22 @@
-import { Image, StyleSheet, Text, View } from "react-native";
-import splash from '../../assets/dropanimation.gif'
+import {  Image, StyleSheet, Text, View } from "react-native";
 import LottieView from "lottie-react-native";
+
 export default function SplashScreen(){
     return(
-        <View style={styles.container}>
-            <View>
-                <View style={{flex:'1',alignItems:'center',justifyContent:'center'}}>
-                    <LottieView
-                     source={require('../../assets/dropanimation.json')}
+        <View style={styles.container} >
+            
+                {/* <View style={styles.lottieContainer}>
+                    <LottieView 
+                      style={{flex: 1}}
+                     source={require('./dropanimation.json')}
                     />
-                </View>
-              {/* <Image source={splash} style={styles.image} /> */}
+                </View> */}
+                <Image
+                 source={require('../../assets/optimised.gif')}
+                />
+              
               <Text style={styles.text}>HASS</Text>
-            </View>
+            
         </View>
     )
 }
@@ -23,18 +27,19 @@ const styles = StyleSheet.create({
         justifyContent:"center",
         alignItems:'center',
         backgroundColor:'#06045E',
+        paddingVertical:100
     },
-    image:{
-        width:100,
-        height:100,
-        resizeMode:'cover'
-    },
+    
+    lottieContainer: {
+        height: 300,
+        aspectRatio:1,
+      },
     text:{
         marginBottom:10,
         textAlign:'center',
         color:'white',
         justifyContent:"center",
         alignItems:'center',
-
+        
     }
 })

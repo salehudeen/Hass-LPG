@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { StatusBar } from 'expo-status-bar';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, Dimensions, Image, ScrollView } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import Navbar from '../../components/Navbar';
 
 const { width, height } = Dimensions.get('window');
 
@@ -23,28 +25,28 @@ const HomePage = ({ navigation }) => {
             info: 'Gas to your location quick and easy.',
             image: require('../../assets/download.jpg'),
             button:'Get Hass Gas',
-            navigateTo: ''
+            navigateTo: 'LPGProducts'
         },
         {
             title: 'Find Stations',
             info: 'Get nearby stations.',
             image: require('../../assets/download.jpg'),
             button:'Find Stations',
-            navigateTo: ''
+            navigateTo: 'stationfinder'
         },
         {
             title: 'Fuel Cards',
             info: 'Apply for Fuel card.',
             image: require('../../assets/download.jpg'),
             button:'Fuel Card',
-            navigateTo: ''
+            navigateTo: 'fuelcard'
         },
     ];
 
     const quickActions = [
-        { title: 'Station Finder', info: 'Locate us anywhere', image: require('../../assets/download.jpg'), navigateTo: '' },
-        { title: 'Hass FCS Card', info: 'Apply | Top Up | Manage', image: require('../../assets/download.jpg'), navigateTo: '' },
-        { title: 'Hass Gas', info: 'Get Hass Gas', image: require('../../assets/download.jpg'), navigateTo: '' },
+        { title: 'Station Finder', info: 'Locate us anywhere', image: require('../../assets/download.jpg'), navigateTo: 'stationfinder' },
+        { title: 'Hass FCS Card', info: 'Apply | Top Up | Manage', image: require('../../assets/download.jpg'), navigateTo: 'fuelcard' },
+        { title: 'Hass Gas', info: 'Get Hass Gas', image: require('../../assets/download.jpg'), navigateTo: 'LPGProducts' },
     ];
 
     const renderCarouselItem = ({ item }) => (
@@ -72,7 +74,12 @@ const HomePage = ({ navigation }) => {
     );
 
     return (
+        
         <View style={styles.container}>
+             <StatusBar  
+                    hidden = {false}
+                    translucent = {true}
+                /> 
             <View style={styles.topSection}>
                 <Text style={styles.greetingText}>Good Afternoon</Text>
                 <ScrollView
@@ -102,24 +109,8 @@ const HomePage = ({ navigation }) => {
                     style={styles.quickActionsList}
                 />
             </View>
-            <View style={styles.navBar}>
-                <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Home')}>
-                    <MaterialIcons name="home" size={30} color="white" />
-                    <Text style={styles.navButtonText}>Home</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('MyOrders')}>
-                    <MaterialIcons name="receipt" size={30} color="white" />
-                    <Text style={styles.navButtonText}>My Orders</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Anticounterfeit')}>
-                    <MaterialIcons name="verified" size={30} color="white" />
-                    <Text style={styles.navButtonText}>Anticounterfeit</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('MyCard')}>
-                    <MaterialIcons name="credit-card" size={30} color="white" />
-                    <Text style={styles.navButtonText}>My Card</Text>
-                </TouchableOpacity>
-            </View>
+            <Navbar/>
+            
         </View>
     );
 };
@@ -231,14 +222,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
         padding: 10,
         backgroundColor: '#06045E',
-    },
-    navButton: {
-        alignItems: 'center',
-    },
-    navButtonText: {
-        color: 'white',
-        fontSize: 12,
-        marginTop: 5,
     },
 });
 
