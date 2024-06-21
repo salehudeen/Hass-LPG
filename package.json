@@ -23,7 +23,7 @@
     "amazon-cognito-identity-js": "^6.3.13",
     "aws-amplify": "^5.3.18",
     "aws-amplify-react-native": "^7.0.8",
-    "expo": "^51.0.12",
+    "expo": "^51.0.13",
     "expo-location": "^17.0.1",
     "expo-status-bar": "~1.12.1",
     "expo-updates": "^0.25.16",
@@ -44,16 +44,16 @@
     "react-native-web": "~0.19.10"
   },
   "devDependencies": {
-    "@aws-amplify/backend": "^1.0.2",
-    "@aws-amplify/backend-cli": "^1.0.3",
+    "@aws-amplify/backend": "^1.0.3",
+    "@aws-amplify/backend-cli": "^1.0.4",
     "@babel/core": "^7.20.0",
-    "aws-cdk": "^2.142.1",
-    "aws-cdk-lib": "^2.142.1",
+    "aws-cdk": "^2.147.0",
+    "aws-cdk-lib": "^2.147.0",
     "constructs": "^10.3.0",
-    "esbuild": "^0.21.3",
+    "esbuild": "^0.21.5",
     "metro-react-native-babel-preset": "^0.77.0",
-    "tsx": "^4.10.4",
-    "typescript": "^5.3.3"
+    "tsx": "^4.15.7",
+    "typescript": "^5.5.2"
   },
   "private": true
 }

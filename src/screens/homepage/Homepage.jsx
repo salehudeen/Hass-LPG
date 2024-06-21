@@ -25,7 +25,7 @@ const HomePage = ({ navigation }) => {
             info: 'Gas to your location quick and easy.',
             image: require('../../assets/download.jpg'),
             button:'Get Hass Gas',
-            navigateTo: 'LPGProducts'
+            navigateTo: 'delivery location'
         },
         {
             title: 'Find Stations',
@@ -39,14 +39,14 @@ const HomePage = ({ navigation }) => {
             info: 'Apply for Fuel card.',
             image: require('../../assets/download.jpg'),
             button:'Fuel Card',
-            navigateTo: 'fuelcard'
+            navigateTo: 'Fuel Card Landing'
         },
     ];
 
     const quickActions = [
         { title: 'Station Finder', info: 'Locate us anywhere', image: require('../../assets/download.jpg'), navigateTo: 'stationfinder' },
-        { title: 'Hass FCS Card', info: 'Apply | Top Up | Manage', image: require('../../assets/download.jpg'), navigateTo: 'fuelcard' },
-        { title: 'Hass Gas', info: 'Get Hass Gas', image: require('../../assets/download.jpg'), navigateTo: 'LPGProducts' },
+        { title: 'Hass FCS Card', info: 'Apply | Top Up | Manage', image: require('../../assets/download.jpg'), navigateTo: 'Fuel Card Landing' },
+        { title: 'Hass Gas', info: 'Get Hass Gas', image: require('../../assets/download.jpg'), navigateTo: 'delivery location' },
     ];
 
     const renderCarouselItem = ({ item }) => (

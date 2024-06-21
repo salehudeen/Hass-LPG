@@ -209,7 +209,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   nextButton: {
-    backgroundColor: '#2196F3',
+    backgroundColor: '#06045E',
     paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 4,
@@ -241,14 +241,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 16,
+    color:'#06045E'
     },
     termsCheckboxText: {
     marginLeft: 8,
     color: '#333',
     },
     submitButton: {
-    backgroundColor: '#2196F3',
+    backgroundColor: '#06045E',
     paddingVertical: 12,
+    marginBottom:10,
     paddingHorizontal: 24,
     borderRadius: 4,
     alignItems: 'center',

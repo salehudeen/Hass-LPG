@@ -25,7 +25,7 @@ const Navbar = () => {
                     <Text style={styles.navButtonText}>Anticounterfeit</Text>
                 </TouchableOpacity> */}
 
-                <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('fuelcard')}>
+                <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Fuel Card Landing')}>
                     <MaterialIcons name="credit-card" size={30} color="white" />
                     <Text style={styles.navButtonText}>My Card</Text>
                 </TouchableOpacity>

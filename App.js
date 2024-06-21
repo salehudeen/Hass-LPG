@@ -11,14 +11,17 @@ import ForgotPassword from './src/screens/Auth/ForgotPassword';
 import MyOrdersScreen from './src/screens/Orders/Myorders';
 import SplashScreen from './src/screens/SplashScreen/SplashScreen';
 import StationFinder from './src/screens/StationFinder/StationFinder';
-import LPGProductsScreen from './src/screens/LPGProducts/LPGProductsScreen';
 import HassFuelCardApplication from './src/screens/FuelCard/HassFuelCardApplication';
 // other imports
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import { useEffect, useState } from 'react';
-
-
+import LocationInputScreen from './src/screens/PlaceOrder/LocationInputScreen';
+import GasCylinderSelectionScreen from './src/screens/PlaceOrder/GasCylinderSelectionScreen';
+import OrderConfirmationScreen from './src/screens/PlaceOrder/OrderConfirmationScreen';
+import DeliveryTrackingScreen from './src/screens/PlaceOrder/DeliveryTrackingScreen';
+import FuelCardLanding from './src/screens/FuelCard/FuelCardLanding';
+import CardDetailsScreen from './src/screens/FuelCard/CardDetailsScreen';
 
 
 
@@ -47,8 +50,16 @@ export default function App() {
       <Stack.Screen name ="Home" component={Homepage}/>
       <Stack.Screen name ="MyOrders" component={MyOrdersScreen}/>
       <Stack.Screen name ="stationfinder" component={StationFinder}/>
-      <Stack.Screen name="LPGProducts" component={LPGProductsScreen} />
+     
+      {/* placing orders screens */}
+      <Stack.Screen name="delivery location" component={LocationInputScreen} />
+      <Stack.Screen name="Gas Selection" component={GasCylinderSelectionScreen} />
+      <Stack.Screen name="Successful order" component={OrderConfirmationScreen} />
+      <Stack.Screen name="DeliveryTrackingScreen" component={DeliveryTrackingScreen} />
+      {/* Fuel card Screens */}
       <Stack.Screen name="fuelcard" component={HassFuelCardApplication} />
+      <Stack.Screen name="Fuel Card Landing" component={FuelCardLanding} />
+      <Stack.Screen name="Card details" component={CardDetailsScreen} />
     </Stack.Navigator>
   </NavigationContainer> 
 
