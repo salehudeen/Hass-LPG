@@ -2,19 +2,22 @@ import { registerRootComponent } from 'expo';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 
-
-// screens
-import Homepage from './src/screens/homepage/Homepage';
+// Auth Screens
 import LoginForm from './src/screens/Auth/LoginPage';
 import SignupForm from './src/screens/Auth/SignupPage';
 import ForgotPassword from './src/screens/Auth/ForgotPassword';
+import ConfirmSignUp from './src/screens/Auth/ConfirmSignUp'; // Add this import
+
+// Screens
+import Homepage from './src/screens/homepage/Homepage';
 import MyOrdersScreen from './src/screens/Orders/Myorders';
 import SplashScreen from './src/screens/SplashScreen/SplashScreen';
 import StationFinder from './src/screens/StationFinder/StationFinder';
 import HassFuelCardApplication from './src/screens/FuelCard/HassFuelCardApplication';
-// other imports
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+
+// Other imports
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useEffect, useState } from 'react';
 import LocationInputScreen from './src/screens/PlaceOrder/LocationInputScreen';
 import GasCylinderSelectionScreen from './src/screens/PlaceOrder/GasCylinderSelectionScreen';
@@ -23,50 +26,56 @@ import DeliveryTrackingScreen from './src/screens/PlaceOrder/DeliveryTrackingScr
 import FuelCardLanding from './src/screens/FuelCard/FuelCardLanding';
 import CardDetailsScreen from './src/screens/FuelCard/CardDetailsScreen';
 
+// Amplify config
+import Amplify from 'aws-amplify';
+import awsconfig from './src/aws-exports';
 
-
+Amplify.configure(awsconfig);
 
 const Stack = createNativeStackNavigator();
-export default function App() {
-  const [isShowSplash,setIsShowSplash] = useState(true);
 
-  useEffect(() =>{
+export default function App() {
+  const [isShowSplash, setIsShowSplash] = useState(true);
+
+  useEffect(() => {
     setTimeout(() => {
-      setIsShowSplash(false)
-    }, 3000)
-  })
+      setIsShowSplash(false);
+    }, 3000);
+  }, []); 
+
   return (
     <>
-    {isShowSplash ? (
-      <SplashScreen/>
-    ) : ( 
-    <NavigationContainer>
-    <Stack.Navigator>
-      {/* auth screens  */}
-      <Stack.Screen name="Login" component={LoginForm}/>
-      <Stack.Screen name="Signup" component={SignupForm} />
-      <Stack.Screen name ="ForgotPassword" component={ForgotPassword}/>
-      {/* other screens */}
-      <Stack.Screen name ="Home" component={Homepage}/>
-      <Stack.Screen name ="MyOrders" component={MyOrdersScreen}/>
-      <Stack.Screen name ="stationfinder" component={StationFinder}/>
-     
-      {/* placing orders screens */}
-      <Stack.Screen name="delivery location" component={LocationInputScreen} />
-      <Stack.Screen name="Gas Selection" component={GasCylinderSelectionScreen} />
-      <Stack.Screen name="Successful order" component={OrderConfirmationScreen} />
-      <Stack.Screen name="DeliveryTrackingScreen" component={DeliveryTrackingScreen} />
-      {/* Fuel card Screens */}
-      <Stack.Screen name="fuelcard" component={HassFuelCardApplication} />
-      <Stack.Screen name="Fuel Card Landing" component={FuelCardLanding} />
-      <Stack.Screen name="Card details" component={CardDetailsScreen} />
-    </Stack.Navigator>
-  </NavigationContainer> 
-
-   )}
-  </>
+      {isShowSplash ? (
+        <SplashScreen/>
+      ) : (
+        <NavigationContainer>
+          <Stack.Navigator>
+            {/* Auth Screens */}
+            <Stack.Screen name="Login" component={LoginForm} />
+            <Stack.Screen name="Signup" component={SignupForm} />
+            <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+            <Stack.Screen name="ConfirmSignUp" component={ConfirmSignUp} /> 
+            
+            {/* Other Screens */}
+            <Stack.Screen name="Home" component={Homepage} />
+            <Stack.Screen name="MyOrders" component={MyOrdersScreen} />
+            <Stack.Screen name="stationfinder" component={StationFinder} />
+            
+            {/* Placing Orders Screens */}
+            <Stack.Screen name="delivery location" component={LocationInputScreen} />
+            <Stack.Screen name="Gas Selection" component={GasCylinderSelectionScreen} />
+            <Stack.Screen name="Successful order" component={OrderConfirmationScreen} />
+            <Stack.Screen name="DeliveryTrackingScreen" component={DeliveryTrackingScreen} />
+            
+            {/* Fuel Card Screens */}
+            <Stack.Screen name="fuelcard" component={HassFuelCardApplication} />
+            <Stack.Screen name="Fuel Card Landing" component={FuelCardLanding} />
+            <Stack.Screen name="Card details" component={CardDetailsScreen} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      )}
+    </>
   );
 }
-
 
 registerRootComponent(App);

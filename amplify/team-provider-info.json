@@ -1,0 +1,21 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-hasslpgapp-dev-91028-authRole",
+      "UnauthRoleArn": "arn:aws:iam::428464588749:role/amplify-hasslpgapp-dev-91028-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::428464588749:role/amplify-hasslpgapp-dev-91028-authRole",
+      "Region": "eu-west-1",
+      "DeploymentBucketName": "amplify-hasslpgapp-dev-91028-deployment",
+      "UnauthRoleName": "amplify-hasslpgapp-dev-91028-unauthRole",
+      "StackName": "amplify-hasslpgapp-dev-91028",
+      "StackId": "arn:aws:cloudformation:eu-west-1:428464588749:stack/amplify-hasslpgapp-dev-91028/b2c1dae0-2f9b-11ef-b0fe-060ad827ffaf",
+      "AmplifyAppId": "d388ht4pofr03c"
+    },
+    "categories": {
+      "auth": {
+        "hasslpgappc789108d": {},
+        "userPoolGroups": {}
+      }
+    }
+  }
+}
