@@ -1,25 +1,48 @@
 import React, { useState } from 'react';
 import { Alert, Button, StyleSheet, Text, TextInput, View } from 'react-native';
-import { Auth } from 'aws-amplify';
 
+import { confirmSignUp } from '@aws-amplify/auth';
 export default function ConfirmSignUp({ route, navigation }) {
     const [code, setCode] = useState('');
-    const { email } = route.params;
-
+    const codeStore = '';
+    const [username, setEmail] =useState('')
+   
     async function handleConfirmSignUp() {
+        if (!username || !code) {
+            Alert.alert("Error", "Please enter both email and confirmation code.");
+            return;
+        }
+    
         try {
-            await Auth.confirmSignUp(email, code);
+            console.log('username', username, 'code', code);
+            await confirmSignUp({ username, confirmationCode: code });
             Alert.alert("Success", "Confirmation successful! You can now log in.");
             navigation.navigate('Login');
         } catch (error) {
             console.log('Error confirming sign up:', error);
-            Alert.alert("Error", error.message || "An error occurred during confirmation.");
+            
+            if (error.name === 'CodeMismatchException') {
+                Alert.alert("Error", "Invalid verification code provided, please try again.");
+            } else if (error.name === 'ExpiredCodeException') {
+                Alert.alert("Error", "Verification code has expired, please request a new one.");
+            } else {
+                Alert.alert("Error", error.message || "An error occurred during confirmation.");
+            }
         }
     }
 
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Confirm Sign Up</Text>
+            <TextInput 
+                    style={styles.input} 
+                    placeholder='Email' 
+                    value={username} 
+                    onChangeText={setEmail} 
+                    autoCorrect={false} 
+                    autoCapitalize='none' 
+                    placeholderTextColor="#777"
+                />
             <TextInput 
                 style={styles.input} 
                 placeholder='Confirmation Code' 

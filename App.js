@@ -6,7 +6,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import LoginForm from './src/screens/Auth/LoginPage';
 import SignupForm from './src/screens/Auth/SignupPage';
 import ForgotPassword from './src/screens/Auth/ForgotPassword';
-import ConfirmSignUp from './src/screens/Auth/ConfirmSignUp'; // Add this import
+import ConfirmSignUp from './src/screens/Auth/ConfirmSignUp'; 
 
 // Screens
 import Homepage from './src/screens/homepage/Homepage';
@@ -27,10 +27,11 @@ import FuelCardLanding from './src/screens/FuelCard/FuelCardLanding';
 import CardDetailsScreen from './src/screens/FuelCard/CardDetailsScreen';
 
 // Amplify config
-import Amplify from 'aws-amplify';
-import awsconfig from './src/aws-exports';
+import {Amplify} from "@aws-amplify/core";
+import  config from './src/aws-exports';
+// Amplify.configure(config);
+Amplify.configure(config)
 
-Amplify.configure(awsconfig);
 
 const Stack = createNativeStackNavigator();
 

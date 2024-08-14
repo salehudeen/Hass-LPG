@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Alert, Button, Image, Pressable, SafeAreaView, StyleSheet, Text, TextInput, View, Dimensions } from 'react-native';
-
+import { signUp } from '@aws-amplify/auth';
 const logo = require("../../assets/Hass-Logo.png");
 
 const { width, height } = Dimensions.get('window');
@@ -9,23 +9,29 @@ export default function SignupForm({navigation}) {
     const [email, setEmail] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
     const [password, setPassword] = useState("");
+    const [username, setUsername] = useState("");
 
     async function handleSignUp() {
         try {
-            const { isSignUpComplete, userId, nextStep } = await signUp({
+            const {user } = await signUp({
                 email,
                 password,
+                username,
                 options: {
                     userAttributes: {
                         phone_number: phoneNumber
                     },
-                    autoSignIn: true
+                    autoSignIn: {
+                        enabled:true
+                    }
                 }
-            });
-
-            console.log(userId);
+            },
+            console.log(user),
+            navigation.navigate('ConfirmSignUp')
+        )
+            
         } catch (error) {
-            console.log('error signing up:', error);
+            console.log('error signing up ',error) 
         }
     }
 
@@ -41,6 +47,15 @@ export default function SignupForm({navigation}) {
                     placeholder='Email' 
                     value={email} 
                     onChangeText={setEmail} 
+                    autoCorrect={false} 
+                    autoCapitalize='none' 
+                    placeholderTextColor="#777"
+                />
+                <TextInput 
+                    style={styles.input} 
+                    placeholder='Username' 
+                    value={username} 
+                    onChangeText={setUsername} 
                     autoCorrect={false} 
                     autoCapitalize='none' 
                     placeholderTextColor="#777"

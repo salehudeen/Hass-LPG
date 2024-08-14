@@ -1,49 +1,83 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Dimensions } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Dimensions, Alert } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
+import { signIn } from '@aws-amplify/auth';
 const { width, height } = Dimensions.get('window');
 
-const LoginForm = ({navigation}) => {
+const LoginForm = ({ navigation }) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleLogin = async () => {
+    if (!email || !password) {
+      Alert.alert('Error', 'Please enter both email and password.');
+      return;
+    }
+    
+    try {
+      const user = await signIn({
+        username: email,
+        password
+      });
+      console.log('Sign in successful:', user);
+      Alert.alert('Success', 'Logged in successfully');
+      navigation.navigate('Home');
+    } catch (error) {
+      console.log('Error message:', error.message);
+      Alert.alert('Error', `Sign in failed: ${error.message}`);
+    }
+  };
+
   return (
     <View style={styles.container}>
-      <StatusBar  
-                    
-                    hidden = {false}    
-               
-                />  
+      <StatusBar hidden={false} />
       <View style={styles.blob1}></View>
       <View style={styles.blob2}></View>
-
       
       <View style={styles.header}>
         <Text style={styles.welcomeText}>Welcome Back</Text>
       </View>
       <View style={styles.inputContainer}>
-        <TextInput style={styles.input} placeholder="Email" placeholderTextColor="#777" />
+        <TextInput 
+          style={styles.input} 
+          placeholder="Email" 
+          placeholderTextColor="#777" 
+          value={email}
+          onChangeText={setEmail}
+          autoCapitalize="none"
+          keyboardType="email-address"
+        />
         <MaterialIcons name="email" size={24} color="#06045E" style={styles.icon} />
       </View>
       <View style={styles.inputContainer}>
-        <TextInput style={styles.input} placeholder="Password" placeholderTextColor="#777" secureTextEntry />
+        <TextInput 
+          style={styles.input} 
+          placeholder="Password" 
+          placeholderTextColor="#777" 
+          secureTextEntry 
+          value={password}
+          onChangeText={setPassword}
+        />
         <MaterialIcons name="lock" size={24} color="#06045E" style={styles.icon} />
       </View>
       <View style={styles.optionsContainer}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => Alert.alert('Info', 'Remember Me functionality not implemented yet.')}>
           <Text style={styles.rememberMe}>Remember Me</Text>
         </TouchableOpacity>
-        <TouchableOpacity>
-          <Text style={styles.forgotPassword} onPress={() => navigation.navigate('ForgotPassword')} >Forgot Password?</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
+          <Text style={styles.forgotPassword}>Forgot Password?</Text>
         </TouchableOpacity>
       </View>
-      <TouchableOpacity style={styles.loginButton} onPress={() => navigation.navigate('Home')}  >
-        <Text style={styles.loginButtonText} >Login</Text>
+      <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+        <Text style={styles.loginButtonText}>Login</Text>
       </TouchableOpacity>
       
       <View style={styles.footer}>
-        <Text style={styles.noAccountText}>Don't have an account ?</Text>
-        <TouchableOpacity>
-          <Text style={styles.signUpText} onPress={() => navigation.navigate('Signup')} >Sign Up</Text>
+        <Text style={styles.noAccountText}>Don't have an account?</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
+          <Text style={styles.signUpText}>Sign Up</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -57,7 +91,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     justifyContent: 'center',
   },
-  
   blob1: {
     position: 'absolute',
     width: width * 0.8,
@@ -122,30 +155,6 @@ const styles = StyleSheet.create({
   },
   loginButtonText: {
     color: '#fff',
-    fontSize: 16,
-  },
-  orText: {
-    textAlign: 'center',
-    marginBottom: 20,
-    color: '#06045E',
-  },
-  googleButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderColor: '#06045E',
-    borderWidth: 1,
-    borderRadius: 5,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    marginBottom: 20,
-  },
-  googleLogo: {
-    width: 20,
-    height: 20,
-    marginRight: 10,
-  },
-  googleButtonText: {
-    color: '#06045E',
     fontSize: 16,
   },
   footer: {
