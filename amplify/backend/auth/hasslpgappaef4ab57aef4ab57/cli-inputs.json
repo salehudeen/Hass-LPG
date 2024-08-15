@@ -1,10 +1,10 @@
 {
   "version": "1",
   "cognitoConfig": {
-    "identityPoolName": "hasslpgappc789108d_identitypool_c789108d",
+    "identityPoolName": "ApplicationUserSide",
     "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "hasslpc789108d",
-    "userPoolName": "hasslpgappc789108d_userpool_c789108d",
+    "resourceNameTruncated": "hasslpaef4ab57",
+    "userPoolName": "ApplicationUsersPool",
     "autoVerifiedAttributes": [
       "email"
     ],
@@ -14,8 +14,8 @@
     ],
     "smsAuthenticationMessage": "Your authentication code is {####}",
     "smsVerificationMessage": "Your verification code is {####}",
-    "emailVerificationSubject": "Your verification code",
-    "emailVerificationMessage": "Your verification code is {####}",
+    "emailVerificationSubject": "Your verification code from Hass LPG ",
+    "emailVerificationMessage": "Here is your verification code for registering with the Hass LPG app is {####}",
     "defaultPasswordPolicy": false,
     "passwordPolicyMinLength": 8,
     "passwordPolicyCharacters": [],
@@ -25,24 +25,23 @@
     "aliasAttributes": [],
     "userpoolClientGenerateSecret": false,
     "userpoolClientRefreshTokenValidity": 30,
-    "userpoolClientWriteAttributes": [
-      "email"
-    ],
-    "userpoolClientReadAttributes": [
-      "email"
-    ],
-    "userpoolClientLambdaRole": "hasslpc789108d_userpoolclient_lambda_role",
+    "userpoolClientWriteAttributes": [],
+    "userpoolClientReadAttributes": [],
+    "userpoolClientLambdaRole": "hasslpaef4ab57_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "c789108d",
-    "resourceName": "hasslpgappc789108d",
+    "sharedId": "aef4ab57",
+    "resourceName": "hasslpgappaef4ab57aef4ab57",
     "authSelections": "identityPoolAndUserPool",
-    "useDefault": "default",
+    "useDefault": "manual",
+    "thirdPartyAuth": false,
     "usernameAttributes": [
       "email"
     ],
-    "userPoolGroupList": [
-      "AppUsers"
-    ],
+    "userPoolGroups": false,
+    "adminQueries": false,
+    "triggers": {},
+    "hostedUI": false,
+    "userPoolGroupList": [],
     "serviceName": "Cognito",
     "usernameCaseSensitive": false,
     "useEnabledMfas": true,
@@ -59,6 +58,11 @@
       ]
     },
     "breakCircularDependency": true,
-    "dependsOn": []
+    "dependsOn": [],
+    "authProviders": [],
+    "parentStack": {
+      "Ref": "AWS::StackId"
+    },
+    "permissions": []
   }
 }

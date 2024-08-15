@@ -3,29 +3,40 @@ import { StatusBar } from 'expo-status-bar';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Dimensions, Alert } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
+
 import { signIn } from '@aws-amplify/auth';
 const { width, height } = Dimensions.get('window');
 
 const LoginForm = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
   const handleLogin = async () => {
     if (!email || !password) {
       Alert.alert('Error', 'Please enter both email and password.');
       return;
     }
-    
     try {
-      const user = await signIn({
+      console.log('Attempting sign in with:', email);
+      const { isSignedIn, nextStep } = await signIn({
         username: email,
-        password
+        password,
+        options: {
+          authFlowType: "USER_PASSWORD_AUTH"
+        }
       });
-      console.log('Sign in successful:', user);
-      Alert.alert('Success', 'Logged in successfully');
-      navigation.navigate('Home');
+      console.log('Sign in result:', { isSignedIn, nextStep });
+      if (isSignedIn) {
+        Alert.alert('Success', 'Logged in successfully');
+        navigation.navigate('Home');
+      } else {
+        console.log('Additional step required:', nextStep);
+        // Handle additional steps if needed
+      }
     } catch (error) {
+      console.log('Error signing in:', error);
+      console.log('Error name:', error.name);
       console.log('Error message:', error.message);
+      console.log('Error code:', error.code);
       Alert.alert('Error', `Sign in failed: ${error.message}`);
     }
   };

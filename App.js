@@ -29,8 +29,9 @@ import CardDetailsScreen from './src/screens/FuelCard/CardDetailsScreen';
 // Amplify config
 import {Amplify} from "@aws-amplify/core";
 import  config from './src/aws-exports';
-// Amplify.configure(config);
+
 Amplify.configure(config)
+
 
 
 const Stack = createNativeStackNavigator();

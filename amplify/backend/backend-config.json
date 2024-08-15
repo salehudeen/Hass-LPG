@@ -1,6 +1,6 @@
 {
   "auth": {
-    "hasslpgappc789108d": {
+    "hasslpgappaef4ab57aef4ab57": {
       "customAuth": false,
       "dependsOn": [],
       "frontendAuthConfig": {
@@ -36,7 +36,7 @@
             "IdentityPoolId"
           ],
           "category": "auth",
-          "resourceName": "hasslpgappc789108d"
+          "resourceName": "hasslpgappaef4ab57aef4ab57"
         }
       ],
       "providerPlugin": "awscloudformation",
