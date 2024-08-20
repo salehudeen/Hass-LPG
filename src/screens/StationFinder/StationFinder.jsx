@@ -1,10 +1,30 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import StationLocationComponent from './StationLocationComponent';
 import Navbar from '../../components/Navbar';
+import * as Location from 'expo-location';
+
 
 const StationFinder = () => {
   const [selectedStation, setSelectedStation] = useState(null);
+  useEffect(() => {
+    // getting the users location 
+    console.log('running')
+  const getUserLocation = async () => {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== 'granted') {
+      console.log('Permission to access location was denied')
+      return; 
+    }
+
+    let location = await Location.getCurrentPositionAsync({});
+    return location.coords;
+  }
+  
+  getUserLocation()
+  }, [])
+  
+  
 
   const stations = [
     {

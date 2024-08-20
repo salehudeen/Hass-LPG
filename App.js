@@ -27,8 +27,8 @@ import FuelCardLanding from './src/screens/FuelCard/FuelCardLanding';
 import CardDetailsScreen from './src/screens/FuelCard/CardDetailsScreen';
 
 // Amplify config
-import {Amplify} from "@aws-amplify/core";
-import  config from './src/aws-exports';
+import {Amplify} from "aws-amplify";
+import config from './src/aws-exports';
 
 Amplify.configure(config)
 

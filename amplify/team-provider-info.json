@@ -15,6 +15,9 @@
       "auth": {
         "hasslpgappaef4ab57aef4ab57": {},
         "userPoolGroups": {}
+      },
+      "api": {
+        "hasslpgapp": {}
       }
     }
   }

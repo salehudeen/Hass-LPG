@@ -3,13 +3,16 @@ import { StatusBar } from 'expo-status-bar';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, Dimensions, Image, ScrollView } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import Navbar from '../../components/Navbar';
+import { useNavigation } from '@react-navigation/native';
+import { signOut } from '@aws-amplify/auth';
 
 const { width, height } = Dimensions.get('window');
 
-const HomePage = ({ navigation }) => {
+const HomePage = () => {
     const [activeIndex, setActiveIndex] = useState(0);
     const carouselRef = useRef(null);
     const intervalRef = useRef(null);
+    const navigation = useNavigation();
 
     useEffect(() => {
         intervalRef.current = setInterval(() => {
@@ -19,34 +22,59 @@ const HomePage = ({ navigation }) => {
         return () => clearInterval(intervalRef.current);
     }, []);
 
+    const handleSignOut = async () => {
+        try {
+            await signOut();
+            navigation.navigate('Login');
+        } catch (error) {
+            console.log('Error signing out:', error);
+            Alert.alert('Error', 'Failed to sign out');
+        }
+    };
+
     const carouselData = [
         {
             title: 'Hass Gas',
             info: 'Gas to your location quick and easy.',
             image: require('../../assets/download.jpg'),
-            button:'Get Hass Gas',
-            navigateTo: 'delivery location'
+            button: 'Get Hass Gas',
+            navigateTo: 'delivery location',
         },
         {
             title: 'Find Stations',
             info: 'Get nearby stations.',
             image: require('../../assets/download.jpg'),
-            button:'Find Stations',
-            navigateTo: 'stationfinder'
+            button: 'Find Stations',
+            navigateTo: 'stationfinder',
         },
         {
             title: 'Fuel Cards',
             info: 'Apply for Fuel card.',
             image: require('../../assets/download.jpg'),
-            button:'Fuel Card',
-            navigateTo: 'Fuel Card Landing'
+            button: 'Fuel Card',
+            navigateTo: 'Fuel Card Landing',
         },
     ];
 
     const quickActions = [
-        { title: 'Station Finder', info: 'Locate us anywhere', image: require('../../assets/download.jpg'), navigateTo: 'stationfinder' },
-        { title: 'Hass FCS Card', info: 'Apply | Top Up | Manage', image: require('../../assets/download.jpg'), navigateTo: 'Fuel Card Landing' },
-        { title: 'Hass Gas', info: 'Get Hass Gas', image: require('../../assets/download.jpg'), navigateTo: 'delivery location' },
+        {
+            title: 'Station Finder',
+            info: 'Locate us anywhere',
+            image: require('../../assets/download.jpg'),
+            navigateTo: 'stationfinder',
+        },
+        {
+            title: 'Hass FCS Card',
+            info: 'Apply | Top Up | Manage',
+            image: require('../../assets/download.jpg'),
+            navigateTo: 'Fuel Card Landing',
+        },
+        {
+            title: 'Hass Gas',
+            info: 'Get Hass Gas',
+            image: require('../../assets/download.jpg'),
+            navigateTo: 'delivery location',
+        },
     ];
 
     const renderCarouselItem = ({ item }) => (
@@ -74,14 +102,17 @@ const HomePage = ({ navigation }) => {
     );
 
     return (
-        
         <View style={styles.container}>
-             <StatusBar  
-                    hidden = {false}
-                    translucent = {true}
-                /> 
+            <StatusBar hidden={false} translucent={true} />
+            <View style={styles.headerSection}>
+                    <Text style={styles.greetingText}>Good Afternoon</Text>
+                    <TouchableOpacity style={styles.signOutButton} onPress={handleSignOut}>
+                        <Text style={styles.signOutButtonText}>Sign Out</Text>
+                    </TouchableOpacity>
+                </View>
             <View style={styles.topSection}>
-                <Text style={styles.greetingText}>Good Afternoon</Text>
+                
+
                 <ScrollView
                     horizontal
                     pagingEnabled
@@ -109,8 +140,7 @@ const HomePage = ({ navigation }) => {
                     style={styles.quickActionsList}
                 />
             </View>
-            <Navbar/>
-            
+            <Navbar />
         </View>
     );
 };
@@ -121,15 +151,33 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
     },
     topSection: {
-        height: height * 0.4,
+        height: height * 0.35,
         backgroundColor: '#f5f5f5',
-        justifyContent: 'center',
+        paddingHorizontal: 5,
+        paddingTop: 1,
+    },
+    headerSection: {
+        paddingHorizontal: 10,
+        paddingTop: 20,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
         alignItems: 'center',
+        marginBottom: 20,
     },
     greetingText: {
-        fontSize: 20,
+        fontSize: 24,
         fontWeight: 'bold',
-        marginVertical: 10,
+        color: '#000',
+    },
+    signOutButton: {
+        backgroundColor: '#06045e',
+        paddingVertical: 8,
+        paddingHorizontal: 16,
+        borderRadius: 5,
+    },
+    signOutButtonText: {
+        color: '#fff',
+        fontSize: 16,
     },
     carouselItem: {
         width: width,
@@ -216,12 +264,6 @@ const styles = StyleSheet.create({
     quickActionInfo: {
         fontSize: 14,
         color: '#000',
-    },
-    navBar: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        padding: 10,
-        backgroundColor: '#06045E',
     },
 });
 

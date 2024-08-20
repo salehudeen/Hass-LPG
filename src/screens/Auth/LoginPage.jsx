@@ -1,15 +1,31 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Dimensions, Alert } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-
-
+import { useNavigation } from '@react-navigation/native';
+import { Auth } from 'aws-amplify';
+import { getCurrentUser } from '@aws-amplify/auth';
 import { signIn } from '@aws-amplify/auth';
 const { width, height } = Dimensions.get('window');
 
 const LoginForm = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigation();
+
+  useEffect(() => {const checkUser = async () => {
+    try {
+     const user =  await getCurrentUser();
+      console.log(user)
+      navigate.navigate('Home');
+    } catch (err) {
+      console.log(err)
+    }
+  };
+
+  checkUser();
+}, [navigation]);
+
   const handleLogin = async () => {
     if (!email || !password) {
       Alert.alert('Error', 'Please enter both email and password.');
@@ -17,21 +33,18 @@ const LoginForm = ({ navigation }) => {
     }
     try {
       console.log('Attempting sign in with:', email);
-      const { isSignedIn, nextStep } = await signIn({
+      await signIn({
         username: email,
         password,
         options: {
           authFlowType: "USER_PASSWORD_AUTH"
         }
       });
-      console.log('Sign in result:', { isSignedIn, nextStep });
-      if (isSignedIn) {
+      
+
         Alert.alert('Success', 'Logged in successfully');
         navigation.navigate('Home');
-      } else {
-        console.log('Additional step required:', nextStep);
-        // Handle additional steps if needed
-      }
+      
     } catch (error) {
       console.log('Error signing in:', error);
       console.log('Error name:', error.name);
