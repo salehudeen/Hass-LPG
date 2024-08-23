@@ -13,16 +13,17 @@ const LoginForm = ({ navigation }) => {
   const [password, setPassword] = useState('');
   const navigate = useNavigation();
 
-  useEffect(() => {const checkUser = async () => {
+  useEffect(() => {
+    const checkUser = async () => {
     try {
      const user =  await getCurrentUser();
-      console.log(user)
+      console.log(user);
       navigate.navigate('Home');
     } catch (err) {
       console.log(err)
     }
   };
-
+  
   checkUser();
 }, [navigation]);
 
@@ -118,9 +119,9 @@ const styles = StyleSheet.create({
   blob1: {
     position: 'absolute',
     width: width * 0.8,
-    height: height * 0.3,
+    height: height * 0.15,
     backgroundColor: '#06045E',
-    borderBottomRightRadius: width * 0.4,
+    borderBottomRightRadius: width * 0.3,
     borderBottomLeftRadius: width * 0.4,
     top: -height * 0.1,
     left: -width * 0.1,
@@ -189,7 +190,7 @@ const styles = StyleSheet.create({
     color: '#06045E',
   },
   signUpText: {
-    color: 'gold',
+    color: 'Red',
     marginLeft: 5,
   },
 });

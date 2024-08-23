@@ -4,7 +4,9 @@ import { View, Text, FlatList, TouchableOpacity, StyleSheet, Dimensions, Image, 
 import { MaterialIcons } from '@expo/vector-icons';
 import Navbar from '../../components/Navbar';
 import { useNavigation } from '@react-navigation/native';
-import { signOut } from '@aws-amplify/auth';
+import { fetchUserAttributes, signOut } from '@aws-amplify/auth';
+
+
 
 const { width, height } = Dimensions.get('window');
 
@@ -15,11 +17,23 @@ const HomePage = () => {
     const navigation = useNavigation();
 
     useEffect(() => {
+        
+        async function handleFetchUserAttributes() {
+            try {
+                const userAttributes = await fetchUserAttributes();
+                console.log('Email:', userAttributes.email);
+            } catch (error) {
+              console.log(error);
+            }
+          }
+          handleFetchUserAttributes();
         intervalRef.current = setInterval(() => {
             setActiveIndex((prevIndex) => (prevIndex + 1) % carouselData.length);
         }, 3000); // Change slide every 3 seconds
-
-        return () => clearInterval(intervalRef.current);
+        
+        return () =>  clearInterval(intervalRef.current);
+        // getting user attributes 
+        
     }, []);
 
     const handleSignOut = async () => {

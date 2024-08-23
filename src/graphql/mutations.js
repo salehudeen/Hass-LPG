@@ -58,3 +58,75 @@ export const deleteStation = /* GraphQL */ `
     }
   }
 `;
+export const createCustomerAccount = /* GraphQL */ `
+  mutation CreateCustomerAccount(
+    $input: CreateCustomerAccountInput!
+    $condition: ModelCustomerAccountConditionInput
+  ) {
+    createCustomerAccount(input: $input, condition: $condition) {
+      id
+      uniqueCustomerId
+      name
+      deliveryLocations {
+        name
+        description
+        latitude
+        longitude
+        __typename
+      }
+      phoneNumber
+      email
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const updateCustomerAccount = /* GraphQL */ `
+  mutation UpdateCustomerAccount(
+    $input: UpdateCustomerAccountInput!
+    $condition: ModelCustomerAccountConditionInput
+  ) {
+    updateCustomerAccount(input: $input, condition: $condition) {
+      id
+      uniqueCustomerId
+      name
+      deliveryLocations {
+        name
+        description
+        latitude
+        longitude
+        __typename
+      }
+      phoneNumber
+      email
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const deleteCustomerAccount = /* GraphQL */ `
+  mutation DeleteCustomerAccount(
+    $input: DeleteCustomerAccountInput!
+    $condition: ModelCustomerAccountConditionInput
+  ) {
+    deleteCustomerAccount(input: $input, condition: $condition) {
+      id
+      uniqueCustomerId
+      name
+      deliveryLocations {
+        name
+        description
+        latitude
+        longitude
+        __typename
+      }
+      phoneNumber
+      email
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;

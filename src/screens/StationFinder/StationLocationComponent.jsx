@@ -1,23 +1,48 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, ScrollView, Platform } from 'react-native';
-import MapView, { Marker, PROVIDER_GOOGLE, PROVIDER_DEFAULT } from 'react-native-maps';
+import MapView, { Marker, PROVIDER_GOOGLE, PROVIDER_DEFAULT, Polyline } from 'react-native-maps';
 import { FontAwesome, Feather } from '@expo/vector-icons';
+import defaultStationImage from '../../assets/station.png';
 
 const { width, height } = Dimensions.get('window');
 
-const StationLocationComponent = ({ stations, selectedStation, onStationPress }) => {
+const StationLocationComponent = ({ stations, userLocation, selectedStation, onStationPress }) => {
   const mapRef = React.useRef(null);
 
   const handleStationPress = (coords) => {
     onStationPress(coords);
 
-    mapRef.current.animateToRegion({
-      latitude: coords.latitude,
-      longitude: coords.longitude,
-      latitudeDelta: 0.1,
-      longitudeDelta: 0.1,
-    });
+    if (coords && mapRef.current) {
+      mapRef.current.animateToRegion({
+        latitude: coords.latitude,
+        longitude: coords.longitude,
+        latitudeDelta: 0.1,
+        longitudeDelta: 0.1,
+      });
+    }
   };
+
+  const initialRegion = userLocation ? {
+    latitude: userLocation.latitude,
+    longitude: userLocation.longitude,
+    latitudeDelta: 0.1,
+    longitudeDelta: 0.1,
+  } : stations.length > 0 ? {
+    latitude: stations[0].coords.latitude,
+    longitude: stations[0].coords.longitude,
+    latitudeDelta: 0.1,
+    longitudeDelta: 0.1,
+  } : {
+    latitude: -1.286389, // Default to Nairobi's latitude
+    longitude: 36.817223, // Default to Nairobi's longitude
+    latitudeDelta: 0.1,
+    longitudeDelta: 0.1,
+  };
+
+  const pathCoordinates = userLocation && selectedStation ? [
+    { latitude: userLocation.latitude, longitude: userLocation.longitude },
+    { latitude: selectedStation.latitude, longitude: selectedStation.longitude }
+  ] : [];
 
   return (
     <View style={styles.container}>
@@ -40,9 +65,9 @@ const StationLocationComponent = ({ stations, selectedStation, onStationPress })
         {stations.map((station, index) => (
           <TouchableOpacity key={index} onPress={() => handleStationPress(station.coords)}>
             <View style={styles.stationCard}>
-              <Image source={station.image} style={styles.stationImage} />
+              <Image source={defaultStationImage} style={styles.stationImage} />
               <View style={styles.stationDetails}>
-                <Text style={styles.stationName}>{station.name}</Text>
+                <Text style={styles.stationName}>{station.StationName}</Text>
                 <Text style={styles.stationAddress}>{station.address}</Text>
                 <View style={styles.stationMeta}>
                   <FontAwesome name="location-arrow" size={16} color="gold" />
@@ -58,55 +83,50 @@ const StationLocationComponent = ({ stations, selectedStation, onStationPress })
       </ScrollView>
 
       {/* Map */}
-      {Platform.OS === 'ios' ? (
-        <MapView
-          ref={mapRef}
-          provider={PROVIDER_DEFAULT}
-          style={styles.map}
-          initialRegion={{
-            latitude: stations[0].coords.latitude,
-            longitude: stations[0].coords.longitude,
-            latitudeDelta: 0.1,
-            longitudeDelta: 0.1,
-          }}
-        >
-          {stations.map((station, index) => (
-            <Marker
-              key={index}
-              coordinate={{
-                latitude: station.coords.latitude,
-                longitude: station.coords.longitude,
-              }}
-              title={station.name}
-              description={station.address}
-            />
-          ))}
-        </MapView>
-      ) : (
-        <MapView
-          ref={mapRef}
-          provider={PROVIDER_GOOGLE}
-          style={styles.map}
-          initialRegion={{
-            latitude: stations[0].coords.latitude,
-            longitude: stations[0].coords.longitude,
-            latitudeDelta: 0.1,
-            longitudeDelta: 0.1,
-          }}
-        >
-          {stations.map((station, index) => (
-            <Marker
-              key={index}
-              coordinate={{
-                latitude: station.coords.latitude,
-                longitude: station.coords.longitude,
-              }}
-              title={station.name}
-              description={station.address}
-            />
-          ))}
-        </MapView>
-      )}
+      <MapView
+        ref={mapRef}
+        provider={Platform.OS === 'ios' ? PROVIDER_DEFAULT : PROVIDER_GOOGLE}
+        style={styles.map}
+        initialRegion={initialRegion}
+      >
+        {/* User Location Marker */}
+        {userLocation && (
+          <Marker
+            coordinate={{
+              latitude: userLocation.latitude,
+              longitude: userLocation.longitude,
+            }}
+            title="Your Location"
+            description="This is where you are"
+            pinColor="blue"
+          />
+        )}
+
+        {/* Stations Markers */}
+        {stations.map((station, index) => (
+          <Marker
+            key={index}
+            coordinate={{
+              latitude: station.coords.latitude,
+              longitude: station.coords.longitude,
+            }}
+            title={station.StationName}
+            description={station.address}
+          />
+        ))}
+
+        {/* Path */}
+        {userLocation && selectedStation && (
+          <Polyline
+            coordinates={[
+              { latitude: userLocation.latitude, longitude: userLocation.longitude },
+              { latitude: selectedStation.latitude, longitude: selectedStation.longitude }
+            ]}
+            strokeColor="#000" // Change the color as needed
+            strokeWidth={2} // Adjust the width as needed
+          />
+        )}
+      </MapView>
     </View>
   );
 };

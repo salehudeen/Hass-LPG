@@ -36,3 +36,50 @@ export const listStations = /* GraphQL */ `
     }
   }
 `;
+export const getCustomerAccount = /* GraphQL */ `
+  query GetCustomerAccount($id: ID!) {
+    getCustomerAccount(id: $id) {
+      id
+      uniqueCustomerId
+      name
+      deliveryLocations {
+        name
+        description
+        latitude
+        longitude
+        __typename
+      }
+      phoneNumber
+      email
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const listCustomerAccounts = /* GraphQL */ `
+  query ListCustomerAccounts(
+    $filter: ModelCustomerAccountFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listCustomerAccounts(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        uniqueCustomerId
+        name
+        phoneNumber
+        email
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;

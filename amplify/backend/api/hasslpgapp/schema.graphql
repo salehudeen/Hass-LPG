@@ -15,3 +15,17 @@ type Location {
   longitude: Float!
 }
 
+type CustomerAccount @model {
+  id: ID!
+  uniqueCustomerId: ID!
+  name: String!
+  deliveryLocations: [DeliveryLocationCA]
+  phoneNumber: String!
+  email: String!
+}
+type DeliveryLocationCA {
+  name: String!
+  description: String
+  latitude: Float!
+  longitude: Float!
+}

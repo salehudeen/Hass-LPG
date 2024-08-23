@@ -4,34 +4,68 @@ import { signUp } from '@aws-amplify/auth';
 const logo = require("../../assets/Hass-Logo.png");
 
 const { width, height } = Dimensions.get('window');
+import { generateClient } from '@aws-amplify/api';
+
+import * as mutations from '../../graphql/mutations'
 
 export default function SignupForm({navigation}) {
     const [email, setEmail] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
     const [password, setPassword] = useState("");
     const [username, setUsername] = useState("");
+     
+    const client = generateClient()
 
     async function handleSignUp() {
         try {
-            const {user } = await signUp({
-                email,
-                password,
+            const signUpResult = await signUp({
                 username,
-                options: {
-                    userAttributes: {
-                        phone_number: phoneNumber
-                    },
-                    autoSignIn: {
-                        enabled:true
-                    }
+                password,
+                attributes: {
+                    email,
+                    phone_number: phoneNumber,
+                    nickname: email
+                },
+                autoSignIn: {
+                    enabled: true
                 }
-            },
-            console.log(user),
-            navigation.navigate('ConfirmSignUp')
-        )
+            });
+    
+            console.log('Sign up result:', JSON.stringify(signUpResult, null, 2));
+    
+            // Check what properties are available on the user object
+            const user = signUpResult.user;
+            console.log('User object:', JSON.stringify(user, null, 2));
+    
             
+            try {
+                const userData = {
+                    input: {
+                        uniqueCustomerId: username,
+                        name: email,
+                        deliveryLocations: [],
+                        phoneNumber: phoneNumber,
+                        email: username
+                    }
+                };
+                console.log('User data to be sent:', userData);
+    
+                const newUser = await client.graphql({
+                    query: mutations.createCustomerAccount,
+                    variables: userData
+                });
+                
+                console.log('User created successfully:', newUser);
+                navigation.navigate('ConfirmSignUp');
+            } catch (error) {
+                console.log('Error creating user in database:', error);
+                if (error.errors) {
+                    error.errors.forEach((e) => console.log('GraphQL error:', e.message));
+                }
+            }
         } catch (error) {
-            console.log('error signing up ',error) 
+            console.log('Error signing up:', error);
+            console.log('Detailed error:', JSON.stringify(error, null, 2));
         }
     }
 
@@ -44,7 +78,7 @@ export default function SignupForm({navigation}) {
             <View style={styles.inputView}>
                 <TextInput 
                     style={styles.input} 
-                    placeholder='Email' 
+                    placeholder='username' 
                     value={email} 
                     onChangeText={setEmail} 
                     autoCorrect={false} 
@@ -53,7 +87,7 @@ export default function SignupForm({navigation}) {
                 />
                 <TextInput 
                     style={styles.input} 
-                    placeholder='Username' 
+                    placeholder='Email' 
                     value={username} 
                     onChangeText={setUsername} 
                     autoCorrect={false} 

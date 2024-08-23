@@ -49,3 +49,72 @@ export const onDeleteStation = /* GraphQL */ `
     }
   }
 `;
+export const onCreateCustomerAccount = /* GraphQL */ `
+  subscription OnCreateCustomerAccount(
+    $filter: ModelSubscriptionCustomerAccountFilterInput
+  ) {
+    onCreateCustomerAccount(filter: $filter) {
+      id
+      uniqueCustomerId
+      name
+      deliveryLocations {
+        name
+        description
+        latitude
+        longitude
+        __typename
+      }
+      phoneNumber
+      email
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onUpdateCustomerAccount = /* GraphQL */ `
+  subscription OnUpdateCustomerAccount(
+    $filter: ModelSubscriptionCustomerAccountFilterInput
+  ) {
+    onUpdateCustomerAccount(filter: $filter) {
+      id
+      uniqueCustomerId
+      name
+      deliveryLocations {
+        name
+        description
+        latitude
+        longitude
+        __typename
+      }
+      phoneNumber
+      email
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onDeleteCustomerAccount = /* GraphQL */ `
+  subscription OnDeleteCustomerAccount(
+    $filter: ModelSubscriptionCustomerAccountFilterInput
+  ) {
+    onDeleteCustomerAccount(filter: $filter) {
+      id
+      uniqueCustomerId
+      name
+      deliveryLocations {
+        name
+        description
+        latitude
+        longitude
+        __typename
+      }
+      phoneNumber
+      email
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
