@@ -1,6 +1,27 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const getCustomerAccountByUniqueId = /* GraphQL */ `
+  query GetCustomerAccountByUniqueId($uniqueCustomerId: String!) {
+    getCustomerAccountByUniqueId(uniqueCustomerId: $uniqueCustomerId) {
+      id
+      uniqueCustomerId
+      name
+      deliveryLocations {
+        name
+        description
+        latitude
+        longitude
+        __typename
+      }
+      phoneNumber
+      email
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
 export const getStation = /* GraphQL */ `
   query GetStation($id: ID!) {
     getStation(id: $id) {

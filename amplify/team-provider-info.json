@@ -9,11 +9,12 @@
       "UnauthRoleName": "amplify-hasslpgapp-dev-91028-unauthRole",
       "StackName": "amplify-hasslpgapp-dev-91028",
       "StackId": "arn:aws:cloudformation:eu-west-1:428464588749:stack/amplify-hasslpgapp-dev-91028/b2c1dae0-2f9b-11ef-b0fe-060ad827ffaf",
-      "AmplifyAppId": "d388ht4pofr03c"
+      "AmplifyAppId": "d388ht4pofr03c",
+      "AuthTriggerTemplateURL": "https://s3.amazonaws.com/amplify-hasslpgapp-dev-91028-deployment/amplify-cfn-templates/auth/auth-trigger-cloudformation-template.json"
     },
     "categories": {
       "auth": {
-        "hasslpgappaef4ab57aef4ab57": {},
+        "hasslpgapp210f6c93210f6c93": {},
         "userPoolGroups": {}
       },
       "api": {

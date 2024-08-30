@@ -1,32 +1,60 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Alert, Button, StyleSheet, Text, TextInput, View } from 'react-native';
+import { confirmSignUp, getCurrentUser, signIn } from '@aws-amplify/auth';
+import { generateClient } from '@aws-amplify/api';
+import * as mutations from '../../graphql/mutations';
 
-import { confirmSignUp } from '@aws-amplify/auth';
 export default function ConfirmSignUp({ route, navigation }) {
     const [code, setCode] = useState('');
-    const codeStore = '';
-    const [username, setEmail] =useState('')
-   
+    const { email, username, phoneNumber,userid,password } = route.params;
+
     async function handleConfirmSignUp() {
-        if (!username || !code) {
-            Alert.alert("Error", "Please enter both email and confirmation code.");
+        if (!userid || !code) {
+            Alert.alert("Error", "Please enter the confirmation code.");
             return;
         }
-    
         try {
-            console.log('username', username, 'code', code);
+            // Confirm sign up
             await confirmSignUp({ username, confirmationCode: code });
-            Alert.alert("Success", "Confirmation successful! You can now log in.");
+            await signIn({
+                username: username,
+                password,
+                options: {
+                  authFlowType: "USER_PASSWORD_AUTH"
+                }
+              });
+            // Generate a new client
+            const client = generateClient();
+    
+            // Prepare user data
+            const userData = {
+                input: {
+                    uniqueCustomerId: userid,
+                    name: email,
+                    deliveryLocations: [],
+                    phoneNumber: phoneNumber,
+                    email: username
+                }
+            };
+    
+            // Create customer account
+            const newUser = await client.graphql({
+                query: mutations.createCustomerAccount,
+                variables: userData
+              
+            });
+    
+            console.log('User created successfully:', newUser);
+            Alert.alert("Success", "Account confirmed and created successfully!");
             navigation.navigate('Login');
         } catch (error) {
-            console.log('Error confirming sign up:', error);
-            
+            console.error('Error in sign up process:', error);
             if (error.name === 'CodeMismatchException') {
                 Alert.alert("Error", "Invalid verification code provided, please try again.");
             } else if (error.name === 'ExpiredCodeException') {
                 Alert.alert("Error", "Verification code has expired, please request a new one.");
             } else {
-                Alert.alert("Error", error.message || "An error occurred during confirmation.");
+                Alert.alert("Error", error.message || "An error occurred during the sign up process.");
             }
         }
     }
@@ -34,15 +62,6 @@ export default function ConfirmSignUp({ route, navigation }) {
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Confirm Sign Up</Text>
-            <TextInput 
-                    style={styles.input} 
-                    placeholder='Email' 
-                    value={username} 
-                    onChangeText={setEmail} 
-                    autoCorrect={false} 
-                    autoCapitalize='none' 
-                    placeholderTextColor="#777"
-                />
             <TextInput 
                 style={styles.input} 
                 placeholder='Confirmation Code' 

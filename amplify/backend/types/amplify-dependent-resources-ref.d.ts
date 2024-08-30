@@ -7,7 +7,7 @@ export type AmplifyDependentResourcesAttributes = {
     }
   },
   "auth": {
-    "hasslpgappaef4ab57aef4ab57": {
+    "hasslpgapp210f6c93210f6c93": {
       "AppClientID": "string",
       "AppClientIDWeb": "string",
       "IdentityPoolId": "string",
@@ -17,7 +17,7 @@ export type AmplifyDependentResourcesAttributes = {
       "UserPoolName": "string"
     },
     "userPoolGroups": {
-      "ApplicationUsersPoolGroupGroupRole": "string"
+      "AppuserpoolgroupGroupRole": "string"
     }
   }
 }

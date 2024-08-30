@@ -17,8 +17,8 @@ const LoginForm = ({ navigation }) => {
     const checkUser = async () => {
     try {
      const user =  await getCurrentUser();
-      console.log(user);
-      navigate.navigate('Home');
+     const userId = user.userId;
+      navigate.navigate('Home',{userId});
     } catch (err) {
       console.log(err)
     }
@@ -33,18 +33,23 @@ const LoginForm = ({ navigation }) => {
       return;
     }
     try {
-      console.log('Attempting sign in with:', email);
-      await signIn({
+  
+       await signIn({
         username: email,
         password,
         options: {
           authFlowType: "USER_PASSWORD_AUTH"
         }
       });
-      
+       
+      const user =  await getCurrentUser();
+      const userId = user.userId;
+      console.log(userId)
+      // const userId = signInUserSession.signInDetails.userId;
+      // console.log('User ID:', userId);
 
         Alert.alert('Success', 'Logged in successfully');
-        navigation.navigate('Home');
+        navigation.navigate('Home',{userId});
       
     } catch (error) {
       console.log('Error signing in:', error);

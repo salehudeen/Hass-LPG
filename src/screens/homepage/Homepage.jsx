@@ -1,40 +1,65 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, Dimensions, Image, ScrollView } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, Dimensions, Image, ScrollView, Alert } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import Navbar from '../../components/Navbar';
 import { useNavigation } from '@react-navigation/native';
 import { fetchUserAttributes, signOut } from '@aws-amplify/auth';
-
-
+import { generateClient } from '@aws-amplify/api';
+import * as queries from '../../graphql/queries';
 
 const { width, height } = Dimensions.get('window');
 
-const HomePage = () => {
+const HomePage = ({ route }) => {
     const [activeIndex, setActiveIndex] = useState(0);
+    const [greeting, setGreeting] = useState('');
+    const [userName, setUserName] = useState('');
     const carouselRef = useRef(null);
     const intervalRef = useRef(null);
     const navigation = useNavigation();
+    const userId = route.params.userId;
 
     useEffect(() => {
-        
-        async function handleFetchUserAttributes() {
+        async function fetchUserName() {
             try {
-                const userAttributes = await fetchUserAttributes();
-                console.log('Email:', userAttributes.email);
+                const client = generateClient();
+                console.log('UserId:', userId);
+                const result = await client.graphql({
+                    query: queries.getCustomerAccountByUniqueId, // Assuming you have a query named getCustomerAccount
+                    variables: { uniqueCustomerId: userId }
+                });
+                const user = result.data.getCustomerAccount;
+                if (user) {
+                    setUserName(user.name);
+                } else {
+                    console.error('User not found');
+                }
             } catch (error) {
-              console.log(error);
+                console.error('Error fetching user data:', error);
             }
-          }
-          handleFetchUserAttributes();
+        }
+
+        function getGreeting() {
+            const now = new Date();
+            const hour = now.getHours();
+            if (hour < 12) {
+                setGreeting('Good Morning');
+            } else if (hour < 18) {
+                setGreeting('Good Afternoon');
+            } else {
+                setGreeting('Greetings');
+            }
+        }
+
+        fetchUserName();
+        getGreeting();
+
         intervalRef.current = setInterval(() => {
             setActiveIndex((prevIndex) => (prevIndex + 1) % carouselData.length);
         }, 3000); // Change slide every 3 seconds
-        
-        return () =>  clearInterval(intervalRef.current);
-        // getting user attributes 
-        
-    }, []);
+
+        return () => clearInterval(intervalRef.current);
+    }, [userId]);
 
     const handleSignOut = async () => {
         try {
@@ -119,14 +144,12 @@ const HomePage = () => {
         <View style={styles.container}>
             <StatusBar hidden={false} translucent={true} />
             <View style={styles.headerSection}>
-                    <Text style={styles.greetingText}>Good Afternoon</Text>
-                    <TouchableOpacity style={styles.signOutButton} onPress={handleSignOut}>
-                        <Text style={styles.signOutButtonText}>Sign Out</Text>
-                    </TouchableOpacity>
-                </View>
+                <Text style={styles.greetingText}>{`${greeting}, ${userName}`}</Text>
+                <TouchableOpacity style={styles.signOutButton} onPress={handleSignOut}>
+                    <Text style={styles.signOutButtonText}>Sign Out</Text>
+                </TouchableOpacity>
+            </View>
             <View style={styles.topSection}>
-                
-
                 <ScrollView
                     horizontal
                     pagingEnabled
@@ -282,3 +305,4 @@ const styles = StyleSheet.create({
 });
 
 export default HomePage;
+
