@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, ScrollView, Platform } from 'react-native';
 import MapView, { Marker, PROVIDER_GOOGLE, PROVIDER_DEFAULT, Polyline } from 'react-native-maps';
 import { FontAwesome, Feather } from '@expo/vector-icons';
@@ -6,8 +6,46 @@ import defaultStationImage from '../../assets/station.png';
 
 const { width, height } = Dimensions.get('window');
 
+// Function to calculate distance using Haversine formula
+const haversineDistance = (lat1, lon1, lat2, lon2) => {
+  const R = 6371; // Radius of Earth in kilometers
+  const dLat = (lat2 - lat1) * (Math.PI / 180);
+  const dLon = (lon2 - lon1) * (Math.PI / 180);
+  const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c; // Distance in kilometers
+};
+
 const StationLocationComponent = ({ stations, userLocation, selectedStation, onStationPress }) => {
+  const [closestStation, setClosestStation] = useState(null);
   const mapRef = React.useRef(null);
+
+  useEffect(() => {
+    if (userLocation && stations.length > 0) {
+      // Find the closest station
+      let minDistance = Infinity;
+      let closest = null;
+
+      stations.forEach((station) => {
+        if (station.coords) {
+          const distance = haversineDistance(
+            userLocation.latitude,
+            userLocation.longitude,
+            station.coords.latitude,
+            station.coords.longitude
+          );
+          if (distance < minDistance) {
+            minDistance = distance;
+            closest = station;
+          }
+        }
+      });
+
+      setClosestStation(closest);
+    }
+  }, [userLocation, stations]);
 
   const handleStationPress = (coords) => {
     onStationPress(coords);
@@ -44,6 +82,17 @@ const StationLocationComponent = ({ stations, userLocation, selectedStation, onS
     { latitude: selectedStation.latitude, longitude: selectedStation.longitude }
   ] : [];
 
+  const handleNearbyPress = () => {
+    if (closestStation && mapRef.current) {
+      mapRef.current.animateToRegion({
+        latitude: closestStation.coords.latitude,
+        longitude: closestStation.coords.longitude,
+        latitudeDelta: 0.1,
+        longitudeDelta: 0.1,
+      });
+    }
+  };
+
   return (
     <View style={styles.container}>
       {/* Header */}
@@ -54,10 +103,10 @@ const StationLocationComponent = ({ stations, userLocation, selectedStation, onS
 
       {/* Tabs */}
       <View style={styles.tabs}>
-        <TouchableOpacity style={[styles.tab, styles.activeTab]}>
+        <TouchableOpacity style={[styles.tab, styles.activeTab]} onPress={handleNearbyPress}>
           <Text style={styles.tabText}>Nearby</Text>
         </TouchableOpacity>
-        <Text> Current Location: Hass Plaza</Text>
+        <Text>Closest Location: {closestStation ? closestStation.StationName : 'N/A'}</Text>
       </View>
 
       {/* Station Card */}

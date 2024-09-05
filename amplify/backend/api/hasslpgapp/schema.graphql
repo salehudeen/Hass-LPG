@@ -14,6 +14,8 @@ type Station @model {
   id: ID!
   StationName: String!
   StationLocation: Location!
+  createdAt: AWSDateTime
+  updatedAt: AWSDateTime
 }
 
 type Location {
@@ -21,16 +23,35 @@ type Location {
   longitude: Float!
 }
 
-type CustomerAccount @model {
-  id: ID!
-  uniqueCustomerId: ID!
+type CustomerAccount @model @searchable  {
+  id: String!
+  uniqueCustomerId: ID! 
   name: String!
   deliveryLocations: [DeliveryLocationCA]
-  phoneNumber: String!
+  phoneNumber: String! 
   email: String!
+ 
 }
+
 type DeliveryLocationCA {
   name: String!
+  description: String
+  latitude: Float!
+  longitude: Float!
+}
+
+type OrdersPlaced @model {
+  id: ID!
+  userId: ID!
+  product: String!
+  status: String! # Can be "Pending" or "Complete"
+  DeliveryLocationDL: [DeliveryLocationDL] # Coordinates or address
+  createdAt: AWSDateTime
+  updatedAt: AWSDateTime
+}
+
+type DeliveryLocationDL {
+  houseNo: String!
   description: String
   latitude: Float!
   longitude: Float!

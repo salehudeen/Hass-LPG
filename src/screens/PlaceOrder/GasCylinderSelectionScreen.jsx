@@ -4,6 +4,7 @@ import { View, Text, Image, TouchableOpacity, StyleSheet, FlatList, Dimensions }
 import { useNavigation } from '@react-navigation/native';
 import Navbar from '../../components/Navbar';
 
+
 const products = [
   { id: '1', name: '6kg Metallic', image: require('../../assets/hass-6kg-metalic.jpg') },
   { id: '2', name: '13kg Composite', image: require('../../assets/hass-composit-13Kg.png') },
@@ -11,13 +12,14 @@ const products = [
   { id: '4', name: '50kg', image: require('../../assets/hass-13kg-Metalic.jpg') },
 ];
 
+
 const { width } = Dimensions.get('window');
 
-const GasCylinderSelectionScreen = () => {
+const GasCylinderSelectionScreen = ({route}) => {
   const navigation = useNavigation();
-
+  const location  = route.params
   const handleSelectProduct = (product) => {
-    navigation.navigate('Successful order', { product });
+    navigation.navigate('Successful order', { product,location });
   };
 
   const renderItem = ({ item }) => (

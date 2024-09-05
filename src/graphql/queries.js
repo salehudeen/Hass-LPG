@@ -22,6 +22,55 @@ export const getCustomerAccountByUniqueId = /* GraphQL */ `
     }
   }
 `;
+export const searchCustomerAccounts = /* GraphQL */ `
+  query SearchCustomerAccounts(
+    $filter: SearchableCustomerAccountFilterInput
+    $sort: [SearchableCustomerAccountSortInput]
+    $limit: Int
+    $nextToken: String
+    $from: Int
+    $aggregates: [SearchableCustomerAccountAggregationInput]
+  ) {
+    searchCustomerAccounts(
+      filter: $filter
+      sort: $sort
+      limit: $limit
+      nextToken: $nextToken
+      from: $from
+      aggregates: $aggregates
+    ) {
+      items {
+        id
+        uniqueCustomerId
+        name
+        phoneNumber
+        email
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      total
+      aggregateItems {
+        name
+        result {
+          ... on SearchableAggregateScalarResult {
+            value
+          }
+          ... on SearchableAggregateBucketResult {
+            buckets {
+              key
+              doc_count
+              __typename
+            }
+          }
+        }
+        __typename
+      }
+      __typename
+    }
+  }
+`;
 export const getStation = /* GraphQL */ `
   query GetStation($id: ID!) {
     getStation(id: $id) {
@@ -95,6 +144,47 @@ export const listCustomerAccounts = /* GraphQL */ `
         name
         phoneNumber
         email
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
+export const getOrdersPlaced = /* GraphQL */ `
+  query GetOrdersPlaced($id: ID!) {
+    getOrdersPlaced(id: $id) {
+      id
+      userId
+      product
+      status
+      DeliveryLocationDL {
+        houseNo
+        description
+        latitude
+        longitude
+        __typename
+      }
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const listOrdersPlaceds = /* GraphQL */ `
+  query ListOrdersPlaceds(
+    $filter: ModelOrdersPlacedFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listOrdersPlaceds(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        userId
+        product
+        status
         createdAt
         updatedAt
         __typename

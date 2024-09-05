@@ -7,7 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import { fetchUserAttributes, signOut } from '@aws-amplify/auth';
 import { generateClient } from '@aws-amplify/api';
 import * as queries from '../../graphql/queries';
-
+import { searchCustomerAccounts } from '../../graphql/queries';
 const { width, height } = Dimensions.get('window');
 
 const HomePage = ({ route }) => {
@@ -20,24 +20,30 @@ const HomePage = ({ route }) => {
     const userId = route.params.userId;
 
     useEffect(() => {
-        async function fetchUserName() {
-            try {
-                const client = generateClient();
-                console.log('UserId:', userId);
-                const result = await client.graphql({
-                    query: queries.getCustomerAccountByUniqueId, // Assuming you have a query named getCustomerAccount
-                    variables: { uniqueCustomerId: userId }
-                });
-                const user = result.data.getCustomerAccount;
-                if (user) {
-                    setUserName(user.name);
-                } else {
-                    console.error('User not found');
-                }
-            } catch (error) {
-                console.error('Error fetching user data:', error);
-            }
-        }
+        // async function fetchUserName(userId) {
+        //     try {
+        //         const client = generateClient();
+        //         console.log('UserId:', userId);
+        
+        //         const result = await client.graphql({
+        //             query: searchCustomerAccounts,
+        //             variables: {
+        //                 filter: { uniqueCustomerId: { eq: userId } }
+        //             }
+        //         });
+        
+        //         const user = result.data.searchCustomerAccounts.items[0];
+        //         console.log(user);
+        
+        //         if (user) {
+        //             setUserName(user.name);
+        //         } else {
+        //             console.error('User not found');
+        //         }
+        //     } catch (error) {
+        //         console.error('Error fetching user data:', error);
+        //     }
+        // }
 
         function getGreeting() {
             const now = new Date();
@@ -51,7 +57,7 @@ const HomePage = ({ route }) => {
             }
         }
 
-        fetchUserName();
+        // fetchUserName();
         getGreeting();
 
         intervalRef.current = setInterval(() => {

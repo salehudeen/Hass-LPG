@@ -118,3 +118,69 @@ export const onDeleteCustomerAccount = /* GraphQL */ `
     }
   }
 `;
+export const onCreateOrdersPlaced = /* GraphQL */ `
+  subscription OnCreateOrdersPlaced(
+    $filter: ModelSubscriptionOrdersPlacedFilterInput
+  ) {
+    onCreateOrdersPlaced(filter: $filter) {
+      id
+      userId
+      product
+      status
+      DeliveryLocationDL {
+        houseNo
+        description
+        latitude
+        longitude
+        __typename
+      }
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onUpdateOrdersPlaced = /* GraphQL */ `
+  subscription OnUpdateOrdersPlaced(
+    $filter: ModelSubscriptionOrdersPlacedFilterInput
+  ) {
+    onUpdateOrdersPlaced(filter: $filter) {
+      id
+      userId
+      product
+      status
+      DeliveryLocationDL {
+        houseNo
+        description
+        latitude
+        longitude
+        __typename
+      }
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onDeleteOrdersPlaced = /* GraphQL */ `
+  subscription OnDeleteOrdersPlaced(
+    $filter: ModelSubscriptionOrdersPlacedFilterInput
+  ) {
+    onDeleteOrdersPlaced(filter: $filter) {
+      id
+      userId
+      product
+      status
+      DeliveryLocationDL {
+        houseNo
+        description
+        latitude
+        longitude
+        __typename
+      }
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;

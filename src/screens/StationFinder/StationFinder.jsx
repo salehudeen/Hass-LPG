@@ -39,47 +39,65 @@ const StationFinder = () => {
         const stationData = await client.graphql({
           query: listStations,
         });
-        const stationList = stationData.data.listStations.items.map((station) => {
-          const stationCoords = {
-            latitude: station.StationLocation.latitude,
-            longitude: station.StationLocation.longitude,
-          };
-          const distance = userLocation ? haversineDistance(
-            userLocation.latitude,
-            userLocation.longitude,
-            stationCoords.latitude,
-            stationCoords.longitude
-          ) : 0;
-          const time = estimateTravelTime(distance);
 
-          return {
-            ...station,
-            coords: stationCoords,
-            distance: `${distance.toFixed(2)} km`,
-            time: `${time} min`,
-          };
+        const stationList = stationData.data.listStations.items.map((station) => {
+          if (station.StationLocation) {
+            const stationCoords = {
+              latitude: station.StationLocation.latitude,
+              longitude: station.StationLocation.longitude,
+            };
+            const distance = userLocation
+              ? haversineDistance(
+                  userLocation.latitude,
+                  userLocation.longitude,
+                  stationCoords.latitude,
+                  stationCoords.longitude
+                )
+              : 0;
+            const time = estimateTravelTime(distance);
+
+            return {
+              ...station,
+              coords: stationCoords,
+              distance: `${distance.toFixed(2)} km`,
+              time: `${time} min`,
+            };
+          } else {
+            return {
+              ...station,
+              coords: { latitude: 0, longitude: 0 },
+              distance: 'N/A',
+              time: 'N/A',
+            };
+          }
         });
+
         setStations(stationList);
       } catch (error) {
         console.error('Error fetching stations:', error);
       }
     };
 
+    fetchStations();
+  }, [userLocation]); // Fetch stations when userLocation changes
+
+  useEffect(() => {
     const getLocationPermission = async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
-        setErrorMsg('Permission to access location was denied');
         Alert.alert('Location Permission', 'Please enable location services to use this feature.');
         return;
       }
 
-      let location = await Location.getCurrentPositionAsync({});
+      let location = await Location.getCurrentPositionAsync({
+        accuracy: Location.Accuracy.High,
+      });
+      console.log('Current location:', location.coords);
       setUserLocation(location.coords);
     };
 
-    fetchStations();
     getLocationPermission();
-  }, [userLocation]);
+  }, []);
 
   const handleStationPress = (coords) => {
     setSelectedStation(coords);

@@ -1,13 +1,53 @@
 // src/screens/OrderConfirmationScreen.js
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { generateClient } from '@aws-amplify/api';
+import * as mutations from '../../graphql/mutations'
+
 
 const OrderConfirmationScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const { product } = route.params;
+  const { product, location } = route.params;
+  
+  
 
+  useEffect(() => {
+    const handleOrderConfirmation = async (product, location) => {
+      console.log(location.latitude, location.longitude)
+      const order = {
+        userId: 'b2d5a4f4-50d1-70fd-9857-a8e735d1517a', // Hardcoded for now; use dynamic userId if available
+        product:product.name,
+        status: 'pending',
+        DeliveryLocationDL: {
+          houseNo: 'no',
+          latitude: '-1.286389',
+          longitude: '36.817223',
+     
+        },
+      };
+  
+      const client = generateClient();
+      try {
+        await client.graphql({
+          query: mutations.createOrdersPlaced,
+          variables: { input: order },
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+  
+    // Ensure product and location are not null before making the call
+    if (product && location) {
+      handleOrderConfirmation(product, location);
+    } else {
+      console.error("Product or location is missing.");
+    }
+  }, [product, location]); 
+  
+  
   const handleTrackDelivery = () => {
     navigation.navigate('DeliveryTrackingScreen', { orderNumber: Math.random().toString(36).substr(2, 9).toUpperCase() });
   };

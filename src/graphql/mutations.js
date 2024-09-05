@@ -130,3 +130,72 @@ export const deleteCustomerAccount = /* GraphQL */ `
     }
   }
 `;
+export const createOrdersPlaced = /* GraphQL */ `
+  mutation CreateOrdersPlaced(
+    $input: CreateOrdersPlacedInput!
+    $condition: ModelOrdersPlacedConditionInput
+  ) {
+    createOrdersPlaced(input: $input, condition: $condition) {
+      id
+      userId
+      product
+      status
+      DeliveryLocationDL {
+        houseNo
+        description
+        latitude
+        longitude
+        __typename
+      }
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const updateOrdersPlaced = /* GraphQL */ `
+  mutation UpdateOrdersPlaced(
+    $input: UpdateOrdersPlacedInput!
+    $condition: ModelOrdersPlacedConditionInput
+  ) {
+    updateOrdersPlaced(input: $input, condition: $condition) {
+      id
+      userId
+      product
+      status
+      DeliveryLocationDL {
+        houseNo
+        description
+        latitude
+        longitude
+        __typename
+      }
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const deleteOrdersPlaced = /* GraphQL */ `
+  mutation DeleteOrdersPlaced(
+    $input: DeleteOrdersPlacedInput!
+    $condition: ModelOrdersPlacedConditionInput
+  ) {
+    deleteOrdersPlaced(input: $input, condition: $condition) {
+      id
+      userId
+      product
+      status
+      DeliveryLocationDL {
+        houseNo
+        description
+        latitude
+        longitude
+        __typename
+      }
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
