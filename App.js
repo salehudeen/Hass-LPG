@@ -30,6 +30,7 @@ import CardDetailsScreen from './src/screens/FuelCard/CardDetailsScreen';
 import {Amplify} from "aws-amplify";
 import config from './src/aws-exports';
 
+
 Amplify.configure(config)
 
 
@@ -60,7 +61,6 @@ export default function App() {
             
             {/* Other Screens */}
             <Stack.Screen name="Home" component={Homepage} />
-            <Stack.Screen name="MyOrders" component={MyOrdersScreen} />
             <Stack.Screen name="stationfinder" component={StationFinder} />
             
             {/* Placing Orders Screens */}
@@ -69,6 +69,11 @@ export default function App() {
             <Stack.Screen name="Successful order" component={OrderConfirmationScreen} />
             <Stack.Screen name="DeliveryTrackingScreen" component={DeliveryTrackingScreen} />
             
+            {/* Order details screen */}
+            <Stack.Screen name="MyOrders" component={MyOrdersScreen} />
+            {/* <Stack.Screen name="ordercard" component={MyOrdersScreen} /> */}
+            
+
             {/* Fuel Card Screens */}
             <Stack.Screen name="fuelcard" component={HassFuelCardApplication} />
             <Stack.Screen name="Fuel Card Landing" component={FuelCardLanding} />

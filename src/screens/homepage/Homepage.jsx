@@ -110,7 +110,7 @@ const HomePage = ({ route }) => {
         },
         {
             title: 'Hass FCS Card',
-            info: 'Apply | Top Up | Manage',
+            info: 'Apply & Manage',
             image: require('../../assets/download.jpg'),
             navigateTo: 'Fuel Card Landing',
         },
@@ -142,7 +142,7 @@ const HomePage = ({ route }) => {
                 <Text style={styles.quickActionTitle}>{item.title}</Text>
                 <Text style={styles.quickActionInfo}>{item.info}</Text>
             </View>
-            <MaterialIcons name="arrow-forward-ios" size={20} color="#000" />
+            <MaterialIcons name="arrow-forward-ios" size={20} color="#000"/>
         </TouchableOpacity>
     );
 
@@ -183,7 +183,7 @@ const HomePage = ({ route }) => {
                     style={styles.quickActionsList}
                 />
             </View>
-            <Navbar />
+            <Navbar userId={userId} />
         </View>
     );
 };

@@ -10,20 +10,22 @@ const OrderConfirmationScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const { product, location } = route.params;
-  
-  
+  const OrderNumber = Math.random().toString(36).substr(2, 9).toUpperCase()
 
   useEffect(() => {
-    const handleOrderConfirmation = async (product, location) => {
-      console.log(location.latitude, location.longitude)
+    const handleOrderConfirmation = async (product, location,OrderNumber) => {
+      
+      
+
       const order = {
+        id: OrderNumber,
         userId: 'b2d5a4f4-50d1-70fd-9857-a8e735d1517a', // Hardcoded for now; use dynamic userId if available
         product:product.name,
         status: 'pending',
         DeliveryLocationDL: {
           houseNo: 'no',
-          latitude: '-1.286389',
-          longitude: '36.817223',
+          latitude: location.location.latitude,
+          longitude: location.location.longitude,
      
         },
       };
@@ -41,7 +43,9 @@ const OrderConfirmationScreen = () => {
   
     // Ensure product and location are not null before making the call
     if (product && location) {
-      handleOrderConfirmation(product, location);
+      console.log("Order number:",OrderNumber)
+      handleOrderConfirmation(product, location,OrderNumber);
+     
     } else {
       console.error("Product or location is missing.");
     }
@@ -63,7 +67,7 @@ const OrderConfirmationScreen = () => {
       </TouchableOpacity>
       <Image source={product.image} style={styles.productImage} resizeMode="contain" />
       <Text style={styles.title}>Order successfully placed</Text>
-      <Text style={styles.orderNumber}>Your order #{Math.random().toString(36).substr(2, 9).toUpperCase()} has been successfully processed and will soon be delivered to you.</Text>
+      <Text style={styles.orderNumber}>Your order #{OrderNumber} has been successfully processed and will soon be delivered to you.</Text>
       <TouchableOpacity style={styles.trackButton} onPress={handleTrackDelivery}>
         <Text style={styles.trackButtonText}>Track Delivery</Text>
       </TouchableOpacity>

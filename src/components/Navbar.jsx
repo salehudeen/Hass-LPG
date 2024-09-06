@@ -6,16 +6,17 @@ import { useNavigation } from '@react-navigation/native';
 
 const { width, height } = Dimensions.get('window');
 
-const Navbar = () => {
+const Navbar = ({userId}) => {
+
     const navigation = useNavigation();
     return (
         <View style={styles.container}>
         <View style={styles.navBar}>
-                <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Home')}>
+                <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Home',{userId})}>
                     <MaterialIcons name="home" size={30} color="white" />
                     <Text style={styles.navButtonText}>Home</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('MyOrders')}>
+                <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('MyOrders',{userId})}>
                     <MaterialIcons name="receipt" size={30} color="white" />
                     <Text style={styles.navButtonText}>My Orders</Text>
                 </TouchableOpacity>
@@ -25,7 +26,7 @@ const Navbar = () => {
                     <Text style={styles.navButtonText}>Anticounterfeit</Text>
                 </TouchableOpacity> */}
 
-                <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Fuel Card Landing')}>
+                <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Fuel Card Landing',{userId})}>
                     <MaterialIcons name="credit-card" size={30} color="white" />
                     <Text style={styles.navButtonText}>My Card</Text>
                 </TouchableOpacity>
