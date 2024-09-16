@@ -39,9 +39,11 @@ const StationFinder = () => {
         const stationData = await client.graphql({
           query: listStations,
         });
-
+      
         const stationList = stationData.data.listStations.items.map((station) => {
-          if (station.StationLocation) {
+          
+          if (station) {
+            
             const stationCoords = {
               latitude: station.StationLocation.latitude,
               longitude: station.StationLocation.longitude,
@@ -71,7 +73,7 @@ const StationFinder = () => {
             };
           }
         });
-
+       
         setStations(stationList);
       } catch (error) {
         console.error('Error fetching stations:', error);

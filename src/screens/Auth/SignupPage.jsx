@@ -1,307 +1,210 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { StatusBar } from 'expo-status-bar';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, Dimensions, Image, ScrollView, Alert } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
-import Navbar from '../../components/Navbar';
-import { useNavigation } from '@react-navigation/native';
-import { fetchUserAttributes, signOut } from '@aws-amplify/auth';
-import { generateClient } from '@aws-amplify/api';
-import * as queries from '../../graphql/queries';
+import React, { useState } from 'react';
+import { Alert, Button, Image, Pressable, SafeAreaView, StyleSheet, Text, TextInput, View, Dimensions } from 'react-native';
+import { signUp } from '@aws-amplify/auth';
+const logo = require("../../assets/Hass-Logo.png");
 
 const { width, height } = Dimensions.get('window');
+import { generateClient } from '@aws-amplify/api';
 
-const HomePage = ({ route }) => {
-    const [activeIndex, setActiveIndex] = useState(0);
-    const [greeting, setGreeting] = useState('');
-    const [userName, setUserName] = useState('');
-    const carouselRef = useRef(null);
-    const intervalRef = useRef(null);
-    const navigation = useNavigation();
-    const userId = route.params.userId;
+import * as mutations from '../../graphql/mutations'
 
-    useEffect(() => {
-        async function fetchUserName() {
-            try {
-                const client = generateClient();
-                const result = await client.graphql({
-                    query: queries.getCustomerAccount, // Assuming you have a query named getCustomerAccount
-                    variables: { id: userId }
-                });
-                const user = result.data.getCustomerAccount;
-                if (user) {
-                    setUserName(user.name);
-                } else {
-                    console.error('User not found');
-                }
-            } catch (error) {
-                console.error('Error fetching user data:', error);
-            }
-        }
+export default function SignupForm({navigation}) {
+    const [email, setEmail] = useState("");
+    const [phoneNumber, setPhoneNumber] = useState("");
+    const [password, setPassword] = useState("");
+    const [username, setUsername] = useState("");
+     
+    const client = generateClient()
 
-        function getGreeting() {
-            const now = new Date();
-            const hour = now.getHours();
-            if (hour < 12) {
-                setGreeting('Good Morning');
-            } else if (hour < 18) {
-                setGreeting('Good Afternoon');
-            } else {
-                setGreeting('Good Night');
-            }
-        }
-
-        fetchUserName();
-        getGreeting();
-
-        intervalRef.current = setInterval(() => {
-            setActiveIndex((prevIndex) => (prevIndex + 1) % carouselData.length);
-        }, 3000); // Change slide every 3 seconds
-
-        return () => clearInterval(intervalRef.current);
-    }, [userId]);
-
-    const handleSignOut = async () => {
+    async function handleSignUp() {
         try {
-            await signOut();
-            navigation.navigate('Login');
+            const signUpResult = await signUp({
+                username,
+                password,
+                attributes: {
+                    email,
+                    phone_number: phoneNumber,
+                    nickname: email
+                },
+                autoSignIn: {
+                    enabled: true
+                }
+            });
+    
+            console.log('Sign up result:', JSON.stringify(signUpResult, null, 2));
+    
+            // Check what properties are available on the user object
+            const user = signUpResult.userId;
+            console.log('User object:', JSON.stringify(user, null, 2));
+    
+            
+            try {
+                const userData = {
+                    input: {
+                        uniqueCustomerId: username,
+                        name: email,
+                        deliveryLocations: [],
+                        phoneNumber: phoneNumber,
+                        email: username
+                    }
+                };
+                console.log('User data to be sent:', userData);
+    
+                const newUser = await client.graphql({
+                    query: mutations.createCustomerAccount,
+                    variables: userData
+                });
+                
+                console.log('User created successfully:', newUser);
+                navigation.navigate('ConfirmSignUp', {email, username, phoneNumber,user,password});
+            } catch (error) {
+                console.log('Error creating user in database:', error);
+                if (error.errors) {
+                    error.errors.forEach((e) => console.log('GraphQL error:', e.message));
+                }
+            }
         } catch (error) {
-            console.log('Error signing out:', error);
-            Alert.alert('Error', 'Failed to sign out');
+            console.log('Error signing up:', error);
+            console.log('Detailed error:', JSON.stringify(error, null, 2));
         }
-    };
-
-    const carouselData = [
-        {
-            title: 'Hass Gas',
-            info: 'Gas to your location quick and easy.',
-            image: require('../../assets/download.jpg'),
-            button: 'Get Hass Gas',
-            navigateTo: 'delivery location',
-        },
-        {
-            title: 'Find Stations',
-            info: 'Get nearby stations.',
-            image: require('../../assets/download.jpg'),
-            button: 'Find Stations',
-            navigateTo: 'stationfinder',
-        },
-        {
-            title: 'Fuel Cards',
-            info: 'Apply for Fuel card.',
-            image: require('../../assets/download.jpg'),
-            button: 'Fuel Card',
-            navigateTo: 'Fuel Card Landing',
-        },
-    ];
-
-    const quickActions = [
-        {
-            title: 'Station Finder',
-            info: 'Locate us anywhere',
-            image: require('../../assets/download.jpg'),
-            navigateTo: 'stationfinder',
-        },
-        {
-            title: 'Hass FCS Card',
-            info: 'Apply | Top Up | Manage',
-            image: require('../../assets/download.jpg'),
-            navigateTo: 'Fuel Card Landing',
-        },
-        {
-            title: 'Hass Gas',
-            info: 'Get Hass Gas',
-            image: require('../../assets/download.jpg'),
-            navigateTo: 'delivery location',
-        },
-    ];
-
-    const renderCarouselItem = ({ item }) => (
-        <TouchableOpacity style={styles.carouselCard} onPress={() => navigation.navigate(item.navigateTo)}>
-            <Image source={item.image} style={styles.carouselImage} />
-            <View style={styles.carouselTextContainer}>
-                <Text style={styles.carouselTitle}>{item.title}</Text>
-                <Text style={styles.carouselInfo}>{item.info}</Text>
-                <TouchableOpacity style={styles.findStationButton} onPress={() => navigation.navigate(item.navigateTo)}>
-                    <Text style={styles.findStationButtonText}>{item.button}</Text>
-                </TouchableOpacity>
-            </View>
-        </TouchableOpacity>
-    );
-
-    const renderQuickActionItem = ({ item }) => (
-        <TouchableOpacity style={styles.quickActionCard} onPress={() => navigation.navigate(item.navigateTo)}>
-            <Image source={item.image} style={styles.quickActionImage} />
-            <View style={styles.quickActionTextContainer}>
-                <Text style={styles.quickActionTitle}>{item.title}</Text>
-                <Text style={styles.quickActionInfo}>{item.info}</Text>
-            </View>
-            <MaterialIcons name="arrow-forward-ios" size={20} color="#000" />
-        </TouchableOpacity>
-    );
+    }
 
     return (
         <View style={styles.container}>
-            <StatusBar hidden={false} translucent={true} />
-            <View style={styles.headerSection}>
-                <Text style={styles.greetingText}>{`${greeting}, ${userName}`}</Text>
-                <TouchableOpacity style={styles.signOutButton} onPress={handleSignOut}>
-                    <Text style={styles.signOutButtonText}>Sign Out</Text>
-                </TouchableOpacity>
-            </View>
-            <View style={styles.topSection}>
-                <ScrollView
-                    horizontal
-                    pagingEnabled
-                    ref={carouselRef}
-                    onScroll={(event) => {
-                        const index = Math.floor(event.nativeEvent.contentOffset.x / width);
-                        setActiveIndex(index);
-                    }}
-                    scrollEventThrottle={16}
-                    showsHorizontalScrollIndicator={false}
-                >
-                    {carouselData.map((item, index) => (
-                        <View key={index} style={styles.carouselItem}>
-                            {renderCarouselItem({ item })}
-                        </View>
-                    ))}
-                </ScrollView>
-            </View>
-            <View style={styles.quickActionsSection}>
-                <Text style={styles.quickActionsTitle}>Quick Actions</Text>
-                <FlatList
-                    data={quickActions}
-                    renderItem={renderQuickActionItem}
-                    keyExtractor={(item) => item.title}
-                    style={styles.quickActionsList}
+            <View style={styles.blob1}></View>
+            <View style={styles.blob2}></View>
+            <Image source={logo} style={styles.image} resizeMode='contain' />
+            <Text style={styles.title}>Sign Up</Text>
+            <View style={styles.inputView}>
+                <TextInput 
+                    style={styles.input} 
+                    placeholder='username' 
+                    value={email} 
+                    onChangeText={setEmail} 
+                    autoCorrect={false} 
+                    autoCapitalize='none' 
+                    placeholderTextColor="#777"
+                />
+                <TextInput 
+                    style={styles.input} 
+                    placeholder='Email' 
+                    value={username} 
+                    onChangeText={setUsername} 
+                    autoCorrect={false} 
+                    autoCapitalize='none' 
+                    placeholderTextColor="#777"
+                />
+                <TextInput 
+                    style={styles.input} 
+                    placeholder='Password' 
+                    secureTextEntry 
+                    value={password} 
+                    onChangeText={setPassword} 
+                    autoCorrect={false} 
+                    autoCapitalize='none' 
+                    placeholderTextColor="#777"
+                />
+                <TextInput 
+                    style={styles.input} 
+                    placeholder='Phone Number' 
+                    value={phoneNumber} 
+                    onChangeText={setPhoneNumber} 
+                    autoCorrect={false} 
+                    autoCapitalize='none' 
+                    placeholderTextColor="#777"
                 />
             </View>
-            <Navbar />
+            <View style={styles.buttonView}>
+                <Pressable style={styles.button} onPress={handleSignUp}>
+                    <Text style={styles.buttonText}>Sign Up</Text>
+                </Pressable>
+            </View>
+            <Text style={styles.footerText}>Already have an account? 
+                <Text style={styles.signup} onPress={() => navigation.navigate('Login')}> Login</Text>
+            </Text>
         </View>
     );
-};
+}
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-    },
-    topSection: {
-        height: height * 0.35,
-        backgroundColor: '#f5f5f5',
-        paddingHorizontal: 5,
-        paddingTop: 1,
-    },
-    headerSection: {
-        paddingHorizontal: 10,
-        paddingTop: 20,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: 20,
-    },
-    greetingText: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: '#000',
-    },
-    signOutButton: {
-        backgroundColor: '#06045e',
-        paddingVertical: 8,
-        paddingHorizontal: 16,
-        borderRadius: 5,
-    },
-    signOutButtonText: {
-        color: '#fff',
-        fontSize: 16,
-    },
-    carouselItem: {
-        width: width,
+        paddingHorizontal: 20,
         justifyContent: 'center',
         alignItems: 'center',
     },
-    carouselCard: {
-        width: width * 0.9,
-        backgroundColor: '#fff',
-        borderRadius: 10,
-        overflow: 'hidden',
-        shadowColor: '#000',
-        shadowOpacity: 0.2,
-        shadowOffset: { width: 0, height: 2 },
-        shadowRadius: 10,
-        elevation: 3,
-    },
-    carouselImage: {
-        width: '100%',
-        height: 150,
-    },
-    carouselTextContainer: {
-        padding: 10,
-    },
-    carouselTitle: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        color: '#000',
-    },
-    carouselInfo: {
-        fontSize: 14,
-               color: '#000',
-        marginVertical: 5,
-    },
-    findStationButton: {
+    blob1: {
+        position: 'absolute',
+        width: width * 0.8,
+        height: height * 0.3,
         backgroundColor: '#06045E',
-        padding: 10,
-        borderRadius: 5,
-        alignItems: 'center',
+        borderBottomRightRadius: width * 0.4,
+        borderBottomLeftRadius: width * 0.4,
+        top: -height * 0.1,
+        left: -width * 0.5,
+      },
+      blob2: {
+        position: 'absolute',
+        width: width * 0.8,
+        height: height * 0.4,
+        backgroundColor: 'gold',
+        borderTopLeftRadius: width * 0.4,
+        borderTopRightRadius: width * 0.4,
+        bottom: -height * 0.2,
+        right: -width * 0.1,
+      },
+    image: {
+        height: 160,
+        width: 170,
+        marginBottom: 40,
     },
-    findStationButtonText: {
-        color: '#fff',
-        fontSize: 14,
+    title: {
+        fontSize: 30,
+        fontWeight: "bold",
+        textTransform: "uppercase",
+        textAlign: "center",
+        color: "#06045E",
+        marginBottom: 40,
     },
-    quickActionsSection: {
-        flex: 1,
-        paddingHorizontal: 10,
+    inputView: {
+        gap: 15,
+        width: "100%",
+        paddingHorizontal: 20,
+        marginBottom: 20,
     },
-    quickActionsTitle: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginVertical: 10,
-    },
-    quickActionsList: {
-        marginVertical: 10,
-    },
-    quickActionCard: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: '#fff',
-        padding: 10,
-        borderRadius: 10,
-        shadowColor: '#000',
-        shadowOpacity: 0.1,
-        shadowOffset: { width: 0, height: 2 },
-        shadowRadius: 5,
-        elevation: 3,
-        marginBottom: 10,
-    },
-    quickActionImage: {
-        width: 50,
+    input: {
         height: 50,
-        borderRadius: 10,
+        paddingHorizontal: 20,
+        borderColor: "#06045E",
+        borderWidth: 1,
+        borderRadius: 7,
+        color: '#06045E',
     },
-    quickActionTextContainer: {
-        flex: 1,
-        marginLeft: 10,
+    buttonView: {
+        width: "100%",
+        paddingHorizontal: 20,
+        marginBottom: 20,
     },
-    quickActionTitle: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: '#000',
+    button: {
+        backgroundColor: "#06045E",
+        height: 50,
+        borderRadius: 5,
+        alignItems: "center",
+        justifyContent: "center",
     },
-    quickActionInfo: {
-        fontSize: 14,
-        color: '#000',
+    buttonText: {
+        color: "white",
+        fontSize: 18,
+        fontWeight: "bold",
     },
+    footerText: {
+        textAlign: "center",
+        color: "gray",
+        marginTop: 20,
+    },
+    signup: {
+        color: "red",
+        fontSize: 13,
+    }
 });
-
-export default HomePage;
-

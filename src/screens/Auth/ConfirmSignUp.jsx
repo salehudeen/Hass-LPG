@@ -6,10 +6,10 @@ import * as mutations from '../../graphql/mutations';
 
 export default function ConfirmSignUp({ route, navigation }) {
     const [code, setCode] = useState('');
-    const { email, username, phoneNumber,userid,password } = route.params;
+    const { email, username, phoneNumber,user,password } = route.params;
 
     async function handleConfirmSignUp() {
-        if (!userid || !code) {
+        if (!user || !code) {
             Alert.alert("Error", "Please enter the confirmation code.");
             return;
         }
@@ -17,8 +17,8 @@ export default function ConfirmSignUp({ route, navigation }) {
             // Confirm sign up
             await confirmSignUp({ username, confirmationCode: code });
             await signIn({
-                username: username,
-                password,
+                username: username,                 
+                password,                                              
                 options: {
                   authFlowType: "USER_PASSWORD_AUTH"
                 }
@@ -29,7 +29,7 @@ export default function ConfirmSignUp({ route, navigation }) {
             // Prepare user data
             const userData = {
                 input: {
-                    uniqueCustomerId: userid,
+                    uniqueCustomerId: user,
                     name: email,
                     deliveryLocations: [],
                     phoneNumber: phoneNumber,

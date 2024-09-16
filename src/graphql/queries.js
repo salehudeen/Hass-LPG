@@ -100,6 +100,10 @@ export const listStations = /* GraphQL */ `
         createdAt
         updatedAt
         __typename
+        StationLocation {
+        latitude
+        longitude
+      }
       }
       nextToken
       __typename
