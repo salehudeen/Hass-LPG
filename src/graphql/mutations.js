@@ -1,6 +1,90 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const createStationManager = /* GraphQL */ `
+  mutation CreateStationManager(
+    $input: CreateStationManagerInput!
+    $condition: ModelStationManagerConditionInput
+  ) {
+    createStationManager(input: $input, condition: $condition) {
+      id
+      username
+      orders {
+        nextToken
+        __typename
+      }
+      managedStation {
+        id
+        StationName
+        createdAt
+        updatedAt
+        stationStockId
+        stationManagerId
+        __typename
+      }
+      createdAt
+      updatedAt
+      stationManagerManagedStationId
+      __typename
+    }
+  }
+`;
+export const updateStationManager = /* GraphQL */ `
+  mutation UpdateStationManager(
+    $input: UpdateStationManagerInput!
+    $condition: ModelStationManagerConditionInput
+  ) {
+    updateStationManager(input: $input, condition: $condition) {
+      id
+      username
+      orders {
+        nextToken
+        __typename
+      }
+      managedStation {
+        id
+        StationName
+        createdAt
+        updatedAt
+        stationStockId
+        stationManagerId
+        __typename
+      }
+      createdAt
+      updatedAt
+      stationManagerManagedStationId
+      __typename
+    }
+  }
+`;
+export const deleteStationManager = /* GraphQL */ `
+  mutation DeleteStationManager(
+    $input: DeleteStationManagerInput!
+    $condition: ModelStationManagerConditionInput
+  ) {
+    deleteStationManager(input: $input, condition: $condition) {
+      id
+      username
+      orders {
+        nextToken
+        __typename
+      }
+      managedStation {
+        id
+        StationName
+        createdAt
+        updatedAt
+        stationStockId
+        stationManagerId
+        __typename
+      }
+      createdAt
+      updatedAt
+      stationManagerManagedStationId
+      __typename
+    }
+  }
+`;
 export const createStation = /* GraphQL */ `
   mutation CreateStation(
     $input: CreateStationInput!
@@ -14,8 +98,33 @@ export const createStation = /* GraphQL */ `
         longitude
         __typename
       }
+      orders {
+        nextToken
+        __typename
+      }
+      manager {
+        id
+        username
+        createdAt
+        updatedAt
+        stationManagerManagedStationId
+        __typename
+      }
+      stock {
+        id
+        metalic_6kg
+        metalic_13kg
+        composite_13kg
+        metalic_50kg
+        createdAt
+        updatedAt
+        stockLevelStationId
+        __typename
+      }
       createdAt
       updatedAt
+      stationStockId
+      stationManagerId
       __typename
     }
   }
@@ -33,8 +142,33 @@ export const updateStation = /* GraphQL */ `
         longitude
         __typename
       }
+      orders {
+        nextToken
+        __typename
+      }
+      manager {
+        id
+        username
+        createdAt
+        updatedAt
+        stationManagerManagedStationId
+        __typename
+      }
+      stock {
+        id
+        metalic_6kg
+        metalic_13kg
+        composite_13kg
+        metalic_50kg
+        createdAt
+        updatedAt
+        stockLevelStationId
+        __typename
+      }
       createdAt
       updatedAt
+      stationStockId
+      stationManagerId
       __typename
     }
   }
@@ -52,8 +186,114 @@ export const deleteStation = /* GraphQL */ `
         longitude
         __typename
       }
+      orders {
+        nextToken
+        __typename
+      }
+      manager {
+        id
+        username
+        createdAt
+        updatedAt
+        stationManagerManagedStationId
+        __typename
+      }
+      stock {
+        id
+        metalic_6kg
+        metalic_13kg
+        composite_13kg
+        metalic_50kg
+        createdAt
+        updatedAt
+        stockLevelStationId
+        __typename
+      }
       createdAt
       updatedAt
+      stationStockId
+      stationManagerId
+      __typename
+    }
+  }
+`;
+export const createStockLevel = /* GraphQL */ `
+  mutation CreateStockLevel(
+    $input: CreateStockLevelInput!
+    $condition: ModelStockLevelConditionInput
+  ) {
+    createStockLevel(input: $input, condition: $condition) {
+      id
+      metalic_6kg
+      metalic_13kg
+      composite_13kg
+      metalic_50kg
+      station {
+        id
+        StationName
+        createdAt
+        updatedAt
+        stationStockId
+        stationManagerId
+        __typename
+      }
+      createdAt
+      updatedAt
+      stockLevelStationId
+      __typename
+    }
+  }
+`;
+export const updateStockLevel = /* GraphQL */ `
+  mutation UpdateStockLevel(
+    $input: UpdateStockLevelInput!
+    $condition: ModelStockLevelConditionInput
+  ) {
+    updateStockLevel(input: $input, condition: $condition) {
+      id
+      metalic_6kg
+      metalic_13kg
+      composite_13kg
+      metalic_50kg
+      station {
+        id
+        StationName
+        createdAt
+        updatedAt
+        stationStockId
+        stationManagerId
+        __typename
+      }
+      createdAt
+      updatedAt
+      stockLevelStationId
+      __typename
+    }
+  }
+`;
+export const deleteStockLevel = /* GraphQL */ `
+  mutation DeleteStockLevel(
+    $input: DeleteStockLevelInput!
+    $condition: ModelStockLevelConditionInput
+  ) {
+    deleteStockLevel(input: $input, condition: $condition) {
+      id
+      metalic_6kg
+      metalic_13kg
+      composite_13kg
+      metalic_50kg
+      station {
+        id
+        StationName
+        createdAt
+        updatedAt
+        stationStockId
+        stationManagerId
+        __typename
+      }
+      createdAt
+      updatedAt
+      stockLevelStationId
       __typename
     }
   }
@@ -139,6 +379,7 @@ export const createOrdersPlaced = /* GraphQL */ `
       id
       userId
       product
+      OrderType
       status
       DeliveryLocationDL {
         houseNo
@@ -149,6 +390,8 @@ export const createOrdersPlaced = /* GraphQL */ `
       }
       createdAt
       updatedAt
+      stationManagerOrdersId
+      stationOrdersId
       __typename
     }
   }
@@ -162,6 +405,7 @@ export const updateOrdersPlaced = /* GraphQL */ `
       id
       userId
       product
+      OrderType
       status
       DeliveryLocationDL {
         houseNo
@@ -172,6 +416,8 @@ export const updateOrdersPlaced = /* GraphQL */ `
       }
       createdAt
       updatedAt
+      stationManagerOrdersId
+      stationOrdersId
       __typename
     }
   }
@@ -185,6 +431,7 @@ export const deleteOrdersPlaced = /* GraphQL */ `
       id
       userId
       product
+      OrderType
       status
       DeliveryLocationDL {
         houseNo
@@ -195,6 +442,8 @@ export const deleteOrdersPlaced = /* GraphQL */ `
       }
       createdAt
       updatedAt
+      stationManagerOrdersId
+      stationOrdersId
       __typename
     }
   }

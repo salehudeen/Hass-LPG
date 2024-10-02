@@ -25,7 +25,7 @@ import OrderConfirmationScreen from './src/screens/PlaceOrder/OrderConfirmationS
 import DeliveryTrackingScreen from './src/screens/PlaceOrder/DeliveryTrackingScreen';
 import FuelCardLanding from './src/screens/FuelCard/FuelCardLanding';
 import CardDetailsScreen from './src/screens/FuelCard/CardDetailsScreen';
-
+import ConfirmOrderDetails from './src/screens/PlaceOrder/ConfirmOrderDetails';
 // Amplify config
 import {Amplify} from "aws-amplify";
 import config from './src/aws-exports';
@@ -43,7 +43,7 @@ export default function App() {
   useEffect(() => {
     setTimeout(() => {
       setIsShowSplash(false);
-    }, 3000);
+    }, 10000);
   }, []); 
 
   return (
@@ -68,10 +68,9 @@ export default function App() {
             <Stack.Screen name="Gas Selection" component={GasCylinderSelectionScreen} />
             <Stack.Screen name="Successful order" component={OrderConfirmationScreen} />
             <Stack.Screen name="DeliveryTrackingScreen" component={DeliveryTrackingScreen} />
-            
+            <Stack.Screen name="Confirm Your Order" component={ConfirmOrderDetails} />
             {/* Order details screen */}
             <Stack.Screen name="MyOrders" component={MyOrdersScreen} />
-            {/* <Stack.Screen name="ordercard" component={MyOrdersScreen} /> */}
             
 
             {/* Fuel Card Screens */}

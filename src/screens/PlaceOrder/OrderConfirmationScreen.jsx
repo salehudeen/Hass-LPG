@@ -9,7 +9,7 @@ import * as mutations from '../../graphql/mutations'
 const OrderConfirmationScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const { product, location } = route.params;
+  const { product } = route.params;
   const OrderNumber = Math.random().toString(36).substr(2, 9).toUpperCase()
 
   useEffect(() => {
@@ -19,13 +19,13 @@ const OrderConfirmationScreen = () => {
 
       const order = {
         id: OrderNumber,
-        userId: 'b2d5a4f4-50d1-70fd-9857-a8e735d1517a', // Hardcoded for now; use dynamic userId if available
+        userId: 'b2d5a4f4-50d1-70fd-9857-a8e735d1517a', // Hardcoded for now;
         product:product.name,
         status: 'pending',
         DeliveryLocationDL: {
           houseNo: 'no',
-          latitude: location.location.latitude,
-          longitude: location.location.longitude,
+          latitude: 1.2943434,  // Hardcoded for now;
+          longitude: 35.4748383, // Hardcoded for now;
      
         },
       };
@@ -42,14 +42,14 @@ const OrderConfirmationScreen = () => {
     };
   
     // Ensure product and location are not null before making the call
-    if (product && location) {
+    if (product) {
       console.log("Order number:",OrderNumber)
-      handleOrderConfirmation(product, location,OrderNumber);
+      handleOrderConfirmation(product,OrderNumber);
      
     } else {
       console.error("Product or location is missing.");
     }
-  }, [product, location]); 
+  }, [product]); 
   
   
   const handleTrackDelivery = () => {

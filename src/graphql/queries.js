@@ -71,6 +71,51 @@ export const searchCustomerAccounts = /* GraphQL */ `
     }
   }
 `;
+export const getStationManager = /* GraphQL */ `
+  query GetStationManager($id: ID!) {
+    getStationManager(id: $id) {
+      id
+      username
+      orders {
+        nextToken
+        __typename
+      }
+      managedStation {
+        id
+        StationName
+        createdAt
+        updatedAt
+        stationStockId
+        stationManagerId
+        __typename
+      }
+      createdAt
+      updatedAt
+      stationManagerManagedStationId
+      __typename
+    }
+  }
+`;
+export const listStationManagers = /* GraphQL */ `
+  query ListStationManagers(
+    $filter: ModelStationManagerFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listStationManagers(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        username
+        createdAt
+        updatedAt
+        stationManagerManagedStationId
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
 export const getStation = /* GraphQL */ `
   query GetStation($id: ID!) {
     getStation(id: $id) {
@@ -81,8 +126,33 @@ export const getStation = /* GraphQL */ `
         longitude
         __typename
       }
+      orders {
+        nextToken
+        __typename
+      }
+      manager {
+        id
+        username
+        createdAt
+        updatedAt
+        stationManagerManagedStationId
+        __typename
+      }
+      stock {
+        id
+        metalic_6kg
+        metalic_13kg
+        composite_13kg
+        metalic_50kg
+        createdAt
+        updatedAt
+        stockLevelStationId
+        __typename
+      }
       createdAt
       updatedAt
+      stationStockId
+      stationManagerId
       __typename
     }
   }
@@ -99,11 +169,56 @@ export const listStations = /* GraphQL */ `
         StationName
         createdAt
         updatedAt
+        stationStockId
+        stationManagerId
         __typename
-        StationLocation {
-        latitude
-        longitude
       }
+      nextToken
+      __typename
+    }
+  }
+`;
+export const getStockLevel = /* GraphQL */ `
+  query GetStockLevel($id: ID!) {
+    getStockLevel(id: $id) {
+      id
+      metalic_6kg
+      metalic_13kg
+      composite_13kg
+      metalic_50kg
+      station {
+        id
+        StationName
+        createdAt
+        updatedAt
+        stationStockId
+        stationManagerId
+        __typename
+      }
+      createdAt
+      updatedAt
+      stockLevelStationId
+      __typename
+    }
+  }
+`;
+export const listStockLevels = /* GraphQL */ `
+  query ListStockLevels(
+    $filter: ModelStockLevelFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listStockLevels(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        metalic_6kg
+        metalic_13kg
+        composite_13kg
+        metalic_50kg
+        createdAt
+        updatedAt
+        stockLevelStationId
+        __typename
       }
       nextToken
       __typename
@@ -163,6 +278,7 @@ export const getOrdersPlaced = /* GraphQL */ `
       id
       userId
       product
+      OrderType
       status
       DeliveryLocationDL {
         houseNo
@@ -173,6 +289,8 @@ export const getOrdersPlaced = /* GraphQL */ `
       }
       createdAt
       updatedAt
+      stationManagerOrdersId
+      stationOrdersId
       __typename
     }
   }
@@ -188,9 +306,12 @@ export const listOrdersPlaceds = /* GraphQL */ `
         id
         userId
         product
+        OrderType
         status
         createdAt
         updatedAt
+        stationManagerOrdersId
+        stationOrdersId
         __typename
       }
       nextToken

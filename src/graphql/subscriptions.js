@@ -1,6 +1,87 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const onCreateStationManager = /* GraphQL */ `
+  subscription OnCreateStationManager(
+    $filter: ModelSubscriptionStationManagerFilterInput
+  ) {
+    onCreateStationManager(filter: $filter) {
+      id
+      username
+      orders {
+        nextToken
+        __typename
+      }
+      managedStation {
+        id
+        StationName
+        createdAt
+        updatedAt
+        stationStockId
+        stationManagerId
+        __typename
+      }
+      createdAt
+      updatedAt
+      stationManagerManagedStationId
+      __typename
+    }
+  }
+`;
+export const onUpdateStationManager = /* GraphQL */ `
+  subscription OnUpdateStationManager(
+    $filter: ModelSubscriptionStationManagerFilterInput
+  ) {
+    onUpdateStationManager(filter: $filter) {
+      id
+      username
+      orders {
+        nextToken
+        __typename
+      }
+      managedStation {
+        id
+        StationName
+        createdAt
+        updatedAt
+        stationStockId
+        stationManagerId
+        __typename
+      }
+      createdAt
+      updatedAt
+      stationManagerManagedStationId
+      __typename
+    }
+  }
+`;
+export const onDeleteStationManager = /* GraphQL */ `
+  subscription OnDeleteStationManager(
+    $filter: ModelSubscriptionStationManagerFilterInput
+  ) {
+    onDeleteStationManager(filter: $filter) {
+      id
+      username
+      orders {
+        nextToken
+        __typename
+      }
+      managedStation {
+        id
+        StationName
+        createdAt
+        updatedAt
+        stationStockId
+        stationManagerId
+        __typename
+      }
+      createdAt
+      updatedAt
+      stationManagerManagedStationId
+      __typename
+    }
+  }
+`;
 export const onCreateStation = /* GraphQL */ `
   subscription OnCreateStation($filter: ModelSubscriptionStationFilterInput) {
     onCreateStation(filter: $filter) {
@@ -11,8 +92,33 @@ export const onCreateStation = /* GraphQL */ `
         longitude
         __typename
       }
+      orders {
+        nextToken
+        __typename
+      }
+      manager {
+        id
+        username
+        createdAt
+        updatedAt
+        stationManagerManagedStationId
+        __typename
+      }
+      stock {
+        id
+        metalic_6kg
+        metalic_13kg
+        composite_13kg
+        metalic_50kg
+        createdAt
+        updatedAt
+        stockLevelStationId
+        __typename
+      }
       createdAt
       updatedAt
+      stationStockId
+      stationManagerId
       __typename
     }
   }
@@ -27,8 +133,33 @@ export const onUpdateStation = /* GraphQL */ `
         longitude
         __typename
       }
+      orders {
+        nextToken
+        __typename
+      }
+      manager {
+        id
+        username
+        createdAt
+        updatedAt
+        stationManagerManagedStationId
+        __typename
+      }
+      stock {
+        id
+        metalic_6kg
+        metalic_13kg
+        composite_13kg
+        metalic_50kg
+        createdAt
+        updatedAt
+        stockLevelStationId
+        __typename
+      }
       createdAt
       updatedAt
+      stationStockId
+      stationManagerId
       __typename
     }
   }
@@ -43,8 +174,111 @@ export const onDeleteStation = /* GraphQL */ `
         longitude
         __typename
       }
+      orders {
+        nextToken
+        __typename
+      }
+      manager {
+        id
+        username
+        createdAt
+        updatedAt
+        stationManagerManagedStationId
+        __typename
+      }
+      stock {
+        id
+        metalic_6kg
+        metalic_13kg
+        composite_13kg
+        metalic_50kg
+        createdAt
+        updatedAt
+        stockLevelStationId
+        __typename
+      }
       createdAt
       updatedAt
+      stationStockId
+      stationManagerId
+      __typename
+    }
+  }
+`;
+export const onCreateStockLevel = /* GraphQL */ `
+  subscription OnCreateStockLevel(
+    $filter: ModelSubscriptionStockLevelFilterInput
+  ) {
+    onCreateStockLevel(filter: $filter) {
+      id
+      metalic_6kg
+      metalic_13kg
+      composite_13kg
+      metalic_50kg
+      station {
+        id
+        StationName
+        createdAt
+        updatedAt
+        stationStockId
+        stationManagerId
+        __typename
+      }
+      createdAt
+      updatedAt
+      stockLevelStationId
+      __typename
+    }
+  }
+`;
+export const onUpdateStockLevel = /* GraphQL */ `
+  subscription OnUpdateStockLevel(
+    $filter: ModelSubscriptionStockLevelFilterInput
+  ) {
+    onUpdateStockLevel(filter: $filter) {
+      id
+      metalic_6kg
+      metalic_13kg
+      composite_13kg
+      metalic_50kg
+      station {
+        id
+        StationName
+        createdAt
+        updatedAt
+        stationStockId
+        stationManagerId
+        __typename
+      }
+      createdAt
+      updatedAt
+      stockLevelStationId
+      __typename
+    }
+  }
+`;
+export const onDeleteStockLevel = /* GraphQL */ `
+  subscription OnDeleteStockLevel(
+    $filter: ModelSubscriptionStockLevelFilterInput
+  ) {
+    onDeleteStockLevel(filter: $filter) {
+      id
+      metalic_6kg
+      metalic_13kg
+      composite_13kg
+      metalic_50kg
+      station {
+        id
+        StationName
+        createdAt
+        updatedAt
+        stationStockId
+        stationManagerId
+        __typename
+      }
+      createdAt
+      updatedAt
+      stockLevelStationId
       __typename
     }
   }
@@ -126,6 +360,7 @@ export const onCreateOrdersPlaced = /* GraphQL */ `
       id
       userId
       product
+      OrderType
       status
       DeliveryLocationDL {
         houseNo
@@ -136,6 +371,8 @@ export const onCreateOrdersPlaced = /* GraphQL */ `
       }
       createdAt
       updatedAt
+      stationManagerOrdersId
+      stationOrdersId
       __typename
     }
   }
@@ -148,6 +385,7 @@ export const onUpdateOrdersPlaced = /* GraphQL */ `
       id
       userId
       product
+      OrderType
       status
       DeliveryLocationDL {
         houseNo
@@ -158,6 +396,8 @@ export const onUpdateOrdersPlaced = /* GraphQL */ `
       }
       createdAt
       updatedAt
+      stationManagerOrdersId
+      stationOrdersId
       __typename
     }
   }
@@ -170,6 +410,7 @@ export const onDeleteOrdersPlaced = /* GraphQL */ `
       id
       userId
       product
+      OrderType
       status
       DeliveryLocationDL {
         houseNo
@@ -180,6 +421,8 @@ export const onDeleteOrdersPlaced = /* GraphQL */ `
       }
       createdAt
       updatedAt
+      stationManagerOrdersId
+      stationOrdersId
       __typename
     }
   }

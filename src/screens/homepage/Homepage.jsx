@@ -83,7 +83,7 @@ const HomePage = ({ route }) => {
             info: 'Gas to your location quick and easy.',
             image: require('../../assets/download.jpg'),
             button: 'Get Hass Gas',
-            navigateTo: 'delivery location',
+            navigateTo: 'Gas Selection',
         },
         {
             title: 'Find Stations',
@@ -118,7 +118,7 @@ const HomePage = ({ route }) => {
             title: 'Hass Gas',
             info: 'Get Hass Gas',
             image: require('../../assets/download.jpg'),
-            navigateTo: 'delivery location',
+            navigateTo: 'Gas Selection',
         },
     ];
 

@@ -10,12 +10,30 @@ type Query {
   getCustomerAccountByUniqueId(uniqueCustomerId: String!): CustomerAccount
 }
 
+type StationManager @model {
+  id: ID!
+  username: String!
+  orders: [OrdersPlaced] @hasMany
+  managedStation: Station @hasOne
+}
+
 type Station @model {
   id: ID!
   StationName: String!
   StationLocation: Location!
+  orders:[OrdersPlaced] @hasMany
+  manager: StationManager @belongsTo
+  stock: StockLevel @hasOne
   createdAt: AWSDateTime
   updatedAt: AWSDateTime
+}
+type StockLevel @model {
+  id: ID!
+  metalic_6kg: Int!
+  metalic_13kg: Int!
+  composite_13kg: Int!
+  metalic_50kg: Int!
+  station: Station @belongsTo
 }
 
 type Location {
@@ -44,10 +62,17 @@ type OrdersPlaced @model {
   id: ID!
   userId: ID!
   product: String!
-  status: String! # Can be "Pending" or "Complete"
-  DeliveryLocationDL: [DeliveryLocationDL] # Coordinates or address
+  OrderType:String!
+  status: OrderStatus! 
+  DeliveryLocationDL: [DeliveryLocationDL] 
   createdAt: AWSDateTime
   updatedAt: AWSDateTime
+}
+enum OrderStatus {
+  WAITING
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
 }
 
 type DeliveryLocationDL {

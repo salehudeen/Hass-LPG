@@ -2,5 +2,13 @@
   {
     "groupName": "Appuserpoolgroup",
     "precedence": 1
+  },
+  {
+    "groupName": "AdminWebUsers",
+    "precedence": 2
+  },
+  {
+    "groupName": "stationmanagerusers",
+    "precedence": 3
   }
 ]
